@@ -1,0 +1,24 @@
+{
+  "esnext": true,
+  "bitwise": true,
+  "curly": true,
+  "eqeqeq": true,
+  "latedef": true,
+  "noarg": true,
+  "regexp": true,
+  "undef": true,
+  "strict": true,
+  "forin": true,
+  "freeze": true,
+  "nonew": true,
+  "worker": true,
+  "browser": true,
+  "devel": true,
+  "module": true,
+  "node": true,
+  "globals": {
+    "require": true,
+    "MODE": true,
+    "angular": true
+  }
+}
