@@ -4,7 +4,8 @@
     "angular": "^1.4.7",
     "bourbon": "^4.2.6",
     "mdi": "^1.0.8-beta",
-    "node-lumx": "^1.0.0"
+    "node-lumx": "^1.0.0",
+    "ts-loader": "^0.6.1"
   },
   "devDependencies": {
     "babel-core": "^6.1.2",
@@ -22,6 +23,7 @@
     "raw-loader": "^0.5.1",
     "sass-loader": "^3.1.1",
     "style-loader": "^0.13.0",
+    "typescript": "^1.6.2",
     "webpack": "^1.12.3",
     "webpack-dev-server": "^1.12.1"
   },
