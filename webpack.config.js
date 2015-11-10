@@ -7,7 +7,7 @@ module.exports = {
   context: APP,
   entry: [
     'webpack/hot/dev-server',
-    './core/bootstrap.js'
+    './core/bootstrap.ts'
   ],
   output: {
     path: APP,
@@ -33,6 +33,9 @@ module.exports = {
     }, {
       test: /\.json/,
       loader: 'json'
+    }, {
+      test: /\.ts(x?)$/,
+      loader: 'ng-annotate!babel?presets[]=es2015!ts-loader'
     }]
   },
   plugins: [
@@ -44,6 +47,8 @@ module.exports = {
     })
   ],
   resolve: {
-    root: APP
+    root: APP,
+    extensions: ['', '.webpack.js', '.web.js', '.ts', '.tsx', '.js']
+    // extensions: ['', '.webpack.js', '.web.js', '.tsx', '.js']
   }
 };
