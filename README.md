@@ -1,2 +1,2 @@
-# webpack-example
-webpack-example
+# webpack-angular-example
+webpack-angular-example
