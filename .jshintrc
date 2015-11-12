@@ -14,10 +14,8 @@
   "worker": true,
   "browser": true,
   "devel": true,
-  "module": true,
   "node": true,
   "globals": {
-    "require": true,
     "MODE": true,
     "angular": true
   }

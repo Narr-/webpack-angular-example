@@ -1,16 +1,18 @@
 'use strict';
 
 var webpack = require('webpack');
-var APP = __dirname + '/app';
+var appPath = __dirname + '/app';
+var distPath = __dirname + '/dist';
+var HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
-  context: APP,
+  context: appPath, // for resolving the entry option
   entry: [
     'webpack/hot/dev-server',
-    './core/bootstrap.ts'
+    './core/bootstrap.js'
   ],
   output: {
-    path: APP,
+    path: distPath,
     filename: 'bundle.js'
   },
   module: {
@@ -18,24 +20,12 @@ module.exports = {
       test: /\.css$/,
       loader: "style!css"
     }, {
-      test: /\.scss$/,
-      loader: 'style!css!sass'
-    }, {
       test: /\.js$/,
-      loader: 'ng-annotate!babel?presets[]=es2015!jshint',
+      loader: 'ng-annotate!jshint',
       exclude: /node_modules|bower_components/
-    }, {
-      test: /\.html/,
-      loader: 'raw'
     }, {
       test: /\.(woff|woff2|ttf|eot|svg)(\?]?.*)?$/,
       loader: 'file-loader?name=res/[name].[ext]?[hash]'
-    }, {
-      test: /\.json/,
-      loader: 'json'
-    }, {
-      test: /\.ts(x?)$/,
-      loader: 'ng-annotate!babel?presets[]=es2015!ts-loader'
     }]
   },
   plugins: [
@@ -44,11 +34,12 @@ module.exports = {
       MODE: {
         production: process.env.NODE_ENV === 'production'
       }
+    }),
+    new HtmlWebpackPlugin({
+      template: appPath + '/index.html'
     })
   ],
   resolve: {
-    root: APP,
-    extensions: ['', '.webpack.js', '.web.js', '.ts', '.tsx', '.js']
-    // extensions: ['', '.webpack.js', '.web.js', '.tsx', '.js']
+    root: appPath
   }
 };

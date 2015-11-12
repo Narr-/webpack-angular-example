@@ -1,31 +1,19 @@
 {
-  "name": "webpack-example",
   "dependencies": {
     "angular": "^1.4.7",
-    "bourbon": "^4.2.6",
-    "mdi": "^1.0.8-beta",
-    "node-lumx": "^1.0.0",
-    "ts-loader": "^0.6.1"
+    "angular-resource": "^1.4.7",
+    "angular-route": "^1.4.7"
   },
   "devDependencies": {
-    "babel-core": "^6.1.2",
-    "babel-loader": "^6.0.1",
-    "babel-preset-es2015": "^6.1.2",
     "css-loader": "^0.22.0",
-    "file-loader": "^0.8.4",
     "gulp": "^3.9.0",
     "gulp-util": "^3.0.7",
+    "html-webpack-plugin": "^2.0.4",
     "jshint": "^2.8.0",
     "jshint-loader": "^0.8.3",
-    "json-loader": "^0.5.3",
     "ng-annotate-loader": "0.0.10",
-    "node-sass": "^3.4.1",
-    "raw-loader": "^0.5.1",
-    "sass-loader": "^3.1.1",
     "style-loader": "^0.13.0",
-    "typescript": "^1.6.2",
-    "webpack": "^1.12.3",
+    "webpack": "^1.12.4",
     "webpack-dev-server": "^1.12.1"
-  },
-  "private": true
+  }
 }
