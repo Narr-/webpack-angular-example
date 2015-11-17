@@ -1,0 +1,51 @@
+<section id="todoapp">
+  <header id="header">
+    <h1>todos</h1>
+    <form id="todo-form" ng-submit="todoVm.addTodo()">
+      <input id="new-todo" placeholder="What needs to be done?" ng-model="todoVm.newTodo" ng-disabled="todoVm.saving" autofocus>
+    </form>
+  </header>
+  <section id="main" ng-show="todoVm.todos.length" ng-cloak>
+    <input id="toggle-all" type="checkbox" ng-model="todoVm.allChecked" ng-click="todoVm.markAll(todoVm.allChecked)">
+    <label for="toggle-all">Mark all as complete</label>
+    <ul id="todo-list">
+      <li ng-repeat="todo in todoVm.todos | filter:todoVm.statusFilter track by $index" ng-class="{completed: todo.completed, editing: todo === todoVm.editedTodo}">
+        <div class="view">
+          <input class="toggle" type="checkbox" ng-model="todo.completed" ng-change="todoVm.toggleCompleted(todo)">
+          <label ng-dblclick="todoVm.editTodo(todo)">{{todo.title}}</label>
+          <button class="destroy" ng-click="todoVm.removeTodo(todo)"></button>
+        </div>
+        <form ng-submit="todoVm.saveEdits(todo, 'submit')">
+          <input class="edit" ng-trim="false" ng-model="todo.title" todo-escape="todoVm.revertEdits(todo)" ng-blur="todoVm.saveEdits(todo, 'blur')" todo-focus="todo === todoVm.editedTodo">
+        </form>
+      </li>
+    </ul>
+  </section>
+  <footer id="footer" ng-show="todoVm.todos.length" ng-cloak>
+    <span id="todo-count"><strong>{{todoVm.remainingCount}}</strong>
+      <ng-pluralize count="todoVm.remainingCount" when="{ one: 'item left', other: 'items left' }"></ng-pluralize>
+    </span>
+    <ul id="filters">
+      <li>
+        <a ng-class="{selected: todoVm.status === ''} " href="#/">All</a>
+      </li>
+      <li>
+        <a ng-class="{selected: todoVm.status === 'active'}" href="#/active">Active</a>
+      </li>
+      <li>
+        <a ng-class="{selected: todoVm.status === 'completed'}" href="#/completed">Completed</a>
+      </li>
+    </ul>
+    <button id="clear-completed" ng-click="todoVm.clearCompletedTodos()" ng-show="todoVm.completedCount">Clear completed</button>
+  </footer>
+</section>
+<footer id="info">
+  <p>Double-click to edit a todo</p>
+  <p>Credits:
+    <a href="http://twitter.com/cburgdorf">Christoph Burgdorf</a>,
+    <a href="http://ericbidelman.com">Eric Bidelman</a>,
+    <a href="http://jacobmumm.com">Jacob Mumm</a> and
+    <a href="http://blog.igorminar.com">Igor Minar</a>
+  </p>
+  <p>Part of <a href="http://todomvc.com">TodoMVC</a></p>
+</footer>
