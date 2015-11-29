@@ -12,7 +12,7 @@ module.exports = angular.module('todomvc', ['ngResource', 'ngRoute'])
         store: /*@ngInject*/ function(todoStorage) {
           // Get the correct module (API or localStorage).
           return todoStorage.then(function(module) {
-            module.get(); // Fetch the todo records in the background(? only for API).
+            module.get(); // Fetch the todo records in the background
             return module;
           });
         }

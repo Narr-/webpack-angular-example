@@ -3,36 +3,34 @@
 var gulp = require('gulp');
 var gutil = require('gulp-util');
 var del = require('del');
+var webpackConfig = require('./webpack.config.js');
 var webpack = require('webpack');
 var WebpackDevServer = require('webpack-dev-server');
-var webpackConfig = require('./webpack.config.js');
 
 ////////////////////////
 // The development server (the recommended option for development)
 gulp.task('webpack-dev-server', function(done) {
+  del.sync('./client/res/img/icon/sprite-*');
+
+  var host = 'localhost';
   var port = 8080;
-  // Modify some webpack config options
-  var devConfig = Object.create(webpackConfig);
-  devConfig.entry.unshift('webpack-dev-server/client?http://localhost:' + port); // for Inline mode
-  devConfig.plugins = devConfig.plugins.concat(
-    new webpack.DefinePlugin({
-      MODE: {}
-    })
-  );
-  devConfig.devtool = 'source-map';
-  devConfig.debug = true; // Switch loaders to debug mode.
+  var publicPath = 'http://' + host + ':' + port + '/';
+  var devConfig = Object.create(webpackConfig({
+    debug: true,
+    publicPath: publicPath
+  }));
 
   // Start a webpack-dev-server
   new WebpackDevServer(webpack(devConfig), {
     stats: {
       colors: true
     }
-  }).listen(port, 'localhost', function(err) {
+  }).listen(port, host, function(err) {
     if (err) {
       throw new gutil.PluginError('webpack-dev-server', err);
     }
-    gutil.log('[webpack-dev-server:Inline Mode]', 'http://localhost:' + port);
-    gutil.log('[webpack-dev-server:Iframe Mode]', 'http://localhost:' + port + '/webpack-dev-server/index.html');
+    gutil.log('[webpack-dev-server:Inline Mode]', publicPath);
+    gutil.log('[webpack-dev-server:Iframe Mode]', publicPath + 'webpack-dev-server/index.html');
   });
 });
 
@@ -41,25 +39,10 @@ gulp.task('default', ['webpack-dev-server']);
 ////////////////////////
 // Production build
 gulp.task('webpack:build', function(done) {
+  del.sync('client/res/img/icon/sprite-*');
   del.sync('dist');
 
-  // modify some webpack config options
-  var config = Object.create(webpackConfig);
-  config.bail = true; // Report the first error as a hard error instead of tolerating it.
-  config.plugins = config.plugins.concat(
-    new webpack.optimize.DedupePlugin(), // https://github.com/webpack/docs/wiki/optimization#deduplication
-    new webpack.optimize.UglifyJsPlugin({
-      // beautify: true,
-      // mangle: false
-    }),
-    new webpack.DefinePlugin({
-      MODE: {
-        production: true
-      }
-    })
-  );
-  // config.devtool = 'source-map';
-
+  var config = Object.create(webpackConfig());
   // create a single instance of the compiler
   var compiler = webpack(config);
   // run

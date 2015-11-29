@@ -1,7 +1,7 @@
 'use strict';
 
-require('index.css');
 require('./vendor');
+require('index.scss');
 
 var appModule = require('index');
 require('todo/todoStorage.factory');

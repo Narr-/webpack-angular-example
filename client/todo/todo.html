@@ -35,6 +35,9 @@
       <li>
         <a ng-class="{selected: todoVm.status === 'completed'}" href="#/completed">Completed</a>
       </li>
+      <li>
+        <img id="narr" src="../res/img/narr.jpg" width="20px" height="20px" alt="Narr">
+      </li>
     </ul>
     <button id="clear-completed" ng-click="todoVm.clearCompletedTodos()" ng-show="todoVm.completedCount">Clear completed</button>
   </footer>
