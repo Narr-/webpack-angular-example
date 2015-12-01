@@ -18,6 +18,7 @@
     "html-loader": "^0.4.0",
     "html-webpack-plugin": "^2.0.4",
     "image-webpack-loader": "^1.6.2",
+    "ip": "^1.1.0",
     "jscs": "^2.6.0",
     "jscs-loader": "^0.2.0",
     "jshint": "^2.5.0",

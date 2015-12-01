@@ -1,19 +1,25 @@
 'use strict';
 
 module.exports = function(option) {
+  var cssAsStyle = true;
   var debug = option && option.debug;
 
   var appPath = __dirname + '/client';
   var distPath = __dirname + '/dist';
+  var labelJsonPath = debug ?
+    option.publicPath + 'client/label/label.json' : option.publicPath + 'res/json/label.json';
 
   var webpack = require('webpack');
   var Sprite = require('sprite-webpack-plugin');
-  // var ExtractTextPlugin = require('extract-text-webpack-plugin');
+  var ExtractTextPlugin = cssAsStyle ? null : require('extract-text-webpack-plugin');
   var HtmlWebpackPlugin = require('html-webpack-plugin');
 
-  var webpackDefineObj = {
-    MODE: {
-      production: !debug
+  var webpackDefineObj = { // this should be JSON.
+    WEBPACK_VAR: {
+      mode: {
+        production: !debug
+      },
+      labelJsonPath: JSON.stringify(labelJsonPath)
     }
   };
   var htmlWebpackPluginCfg = {
@@ -32,11 +38,12 @@ module.exports = function(option) {
     },
     context: appPath, // for resolving the entry option
     entry: [
-      './core/bootstrap.js' // TODO multiple entry points
+      './core/bootstrap.js'
     ],
     output: {
       path: distPath,
-      filename: 'bundle.js?[hash]'
+      filename: 'bundle.js?[hash]', // js/bundle.js?[hash]
+      chunkFilename: '[name].js?[hash]' // js/[name].js?[hash]
     },
     module: {
       preLoaders: [{
@@ -47,25 +54,31 @@ module.exports = function(option) {
       loaders: [{
         test: /\.scss$/,
         include: /node_modules/,
-        // loader: ExtractTextPlugin.extract('style', ['css' + (debug ? '?sourceMap' : ''), 'sass'])
-        loaders: ['style', 'css' + (debug ? '?sourceMap' : ''), 'sass']
+        loader: ExtractTextPlugin ?
+          ExtractTextPlugin.extract('style', ['css' + (debug ? '?sourceMap' : ''), 'sass']) : null,
+        loaders: !ExtractTextPlugin ? ['style', 'css' + (debug ? '?sourceMap' : ''), 'sass'] : null
       }, {
         test: /\.scss$/,
         exclude: /node_modules/,
-        // loader: ExtractTextPlugin.extract('style', ['css' + (debug ? '?sourceMap' : ''), 'autoprefixer?browsers=last 2 versions', 'resolve-url', 'sass'])
-        loaders: ['style', 'css' + (debug ? '?sourceMap' : ''), 'autoprefixer?browsers=last 2 versions', 'resolve-url', 'sass']
+        loader: ExtractTextPlugin ? ExtractTextPlugin.extract('style', [
+          'css' + (debug ? '?sourceMap' : ''),
+          'autoprefixer?browsers=last 2 versions', 'resolve-url', 'sass'
+        ]) : null,
+        loaders: !ExtractTextPlugin ? ['style', 'css' + (debug ? '?sourceMap' : ''),
+          'autoprefixer?browsers=last 2 versions', 'resolve-url', 'sass'
+        ] : null
       }, {
         test: /\.html$/,
         loader: 'ngtemplate?module=todomvc&relativeTo=' + appPath + '&prefix=partials!html'
       }, {
         test: /\.(jpe?g|png|gif|svg)$/i,
         loaders: [
-          'url?limit=10000&name=img/[hash].[ext]',
+          'url?limit=10000&name=res/img/[hash].[ext]',
           'image-webpack?bypassOnDebug&optimizationLevel=7' // https://github.com/tcoopman/image-webpack-loader#bypassondebug-all
         ]
       }, {
         test: /\.(woff|woff2|ttf|otf|svg|eot)(\?.*?)?$/,
-        loader: 'url?limit=10000&name=font/[name].[ext]?[hash]'
+        loader: 'url?limit=10000&name=res/font/[name].[ext]?[hash]'
       }, {
         test: /\.js$/,
         loader: 'ng-annotate',
@@ -99,7 +112,6 @@ module.exports = function(option) {
         'multiFolders': true,
         'prefix': 'sprite-icon'
       }),
-      // new ExtractTextPlugin('[name].css?[contenthash]'),
       new HtmlWebpackPlugin(htmlWebpackPluginCfg)
     ],
     resolve: {
@@ -111,13 +123,21 @@ module.exports = function(option) {
     config.devtool = 'source-map';
     config.debug = true; // Switch loaders to debug mode.
     config.entry.unshift('webpack-dev-server/client?' + option.publicPath); // for Inline mode
+    config.entry.push('webpack/hot/dev-server'); // for Hot Module Replacement
     config.output.publicPath = option.publicPath; // https://webpack.github.io/docs/configuration.html#output-publicpath, for url in Blob CSS
+    config.plugins.push(new webpack.HotModuleReplacementPlugin()); // for Hot Module Replacement
   } else {
     config.bail = true; // Report the first error as a hard error instead of tolerating it.
     config.plugins.push(new webpack.optimize.DedupePlugin()); // https://github.com/webpack/docs/wiki/optimization#deduplication
     config.plugins.push(new webpack.optimize.UglifyJsPlugin({
       // beautify: true,
       // mangle: false
+    }));
+  }
+  if (ExtractTextPlugin) {
+    // https://github.com/webpack/extract-text-webpack-plugin#api
+    config.plugins.push(new ExtractTextPlugin('bundle.css?[contenthash]', { // css/bundle.css?[contenthash]
+      allChunks: true
     }));
   }
 

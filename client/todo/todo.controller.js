@@ -7,7 +7,7 @@
 'use strict';
 
 angular.module('todomvc')
-  .controller('TodoCtrl', function TodoCtrl(store, $scope, $filter, $routeParams) {
+  .controller('TodoCtrl', function TodoCtrl(store, $scope, $filter, $routeParams, labelGroup) {
 
     var vm = this;
     vm.todos = $scope.todos = store.todos; // $scope.todos => to watch todos by $scope.$watch
@@ -121,5 +121,17 @@ angular.module('todomvc')
           vm.toggleCompleted(todo, completed);
         }
       });
+    };
+
+    vm.loadChunks = function() {
+      if (!labelGroup.isCalled) {
+        labelGroup.isCalled = true;
+        require.ensure([], function(require) {
+          require('label/label.scss');
+          var LoadJSON = require('label/loadJSON');
+          labelGroup.loadHtml = new LoadJSON();
+          labelGroup.setHtml();
+        }, 'label-chunk');
+      }
     };
   });

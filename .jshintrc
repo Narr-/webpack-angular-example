@@ -16,7 +16,7 @@
   "devel": true,
   "node": true,
   "globals": {
-    "MODE": true,
+    "WEBPACK_VAR": true,
     "angular": true
   }
 }

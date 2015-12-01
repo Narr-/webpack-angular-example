@@ -3,6 +3,7 @@
 var gulp = require('gulp');
 var gutil = require('gulp-util');
 var del = require('del');
+var ip = require('ip');
 var webpackConfig = require('./webpack.config.js');
 var webpack = require('webpack');
 var WebpackDevServer = require('webpack-dev-server');
@@ -12,7 +13,9 @@ var WebpackDevServer = require('webpack-dev-server');
 gulp.task('webpack-dev-server', function(done) {
   del.sync('./client/res/img/icon/sprite-*');
 
-  var host = 'localhost';
+  var onlyThisHost = false; // https://nodejs.org/api/net.html#net_server_listen_port_hostname_backlog_callback
+  var myIp = ip.address(); // my ip address
+  var host = !onlyThisHost ? myIp : 'localhost';
   var port = 8080;
   var publicPath = 'http://' + host + ':' + port + '/';
   var devConfig = Object.create(webpackConfig({
@@ -22,10 +25,11 @@ gulp.task('webpack-dev-server', function(done) {
 
   // Start a webpack-dev-server
   new WebpackDevServer(webpack(devConfig), {
+    hot: true, // for Hot Module Replacement
     stats: {
       colors: true
     }
-  }).listen(port, host, function(err) {
+  }).listen(port, !onlyThisHost ? null : host, function(err) {
     if (err) {
       throw new gutil.PluginError('webpack-dev-server', err);
     }
@@ -41,8 +45,12 @@ gulp.task('default', ['webpack-dev-server']);
 gulp.task('webpack:build', function(done) {
   del.sync('client/res/img/icon/sprite-*');
   del.sync('dist');
+  gulp.src('client/label/label.json').pipe(gulp.dest('dist/res/json'));
 
-  var config = Object.create(webpackConfig());
+  var myIp = ip.address();
+  var config = Object.create(webpackConfig({
+    publicPath: 'http://' + myIp + ':8080/'
+  }));
   // create a single instance of the compiler
   var compiler = webpack(config);
   // run

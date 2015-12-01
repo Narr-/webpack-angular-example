@@ -83,6 +83,7 @@ input[type='checkbox'] {
   -webkit-text-rendering: optimizeLegibility;
   -moz-text-rendering: optimizeLegibility;
   text-rendering: optimizeLegibility;
+  cursor: pointer;
 }
 
 #new-todo,
@@ -378,14 +379,5 @@ html #clear-completed:active {
 
   #filters {
     bottom: 10px;
-  }
-}
-
-.label-group {
-  .label:empty {
-    display: inline-block;
-    margin-right: 5px;
-    width: 100px;
-    height: 100px;
   }
 }

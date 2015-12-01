@@ -9,15 +9,7 @@
 </head>
 <body>
   <div id="bg-img">
-    <div class="label-group">
-      <span class="label sprite-icon-pretty-girl-0"></span>
-      <span class="label sprite-icon-pretty-girl-1"></span>
-      <span class="label sprite-icon-pretty-girl-2"></span>
-      <span class="label sprite-icon-pretty-girl-3"></span>
-      <span class="label sprite-icon-pretty-girl-4"></span>
-      <span class="label sprite-icon-pretty-girl-5"></span>
-      <span class="label sprite-icon-pretty-girl-6"></span>
-    </div>
+    <div class="label-group" ng-controller="LabelGroupCtrl as lgVm" label-group></div>
     <div ng-view />
   </div>
 </body>
