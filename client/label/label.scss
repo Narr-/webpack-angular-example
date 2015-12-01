@@ -1,0 +1,11 @@
+@import '../res/img/icon/sprite-first';
+@import '../res/img/icon/sprite-second';
+
+.label-group {
+  .label:empty {
+    display: inline-block;
+    margin-right: 5px;
+    width: 100px;
+    height: 100px;
+  }
+}
