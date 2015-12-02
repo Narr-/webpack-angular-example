@@ -1,16 +1,18 @@
 <!doctype html>
 <html lang="en">
-<head>
-  <meta charset="utf-8">
-  <title>AngularJS • TodoMVC</title>
-  <!--
-  <style>[ng-cloak] { display: none; }</style>
-  -->
-</head>
-<body>
-  <div id="bg-img">
-    <div class="label-group" ng-controller="LabelGroupCtrl as lgVm" label-group></div>
-    <div ng-view />
-  </div>
-</body>
+  <head>
+    <base href="/">
+    <meta charset="utf-8">
+    <title>AngularJS • TodoMVC</title>
+    <link rel="icon" type="image/x-icon" href="<%= require('res/img/favicon.ico') %>">
+    <!--
+    <style>[ng-cloak] { display: none; }</style>
+    -->
+  </head>
+  <body>
+    <div id="bg-img">
+      <div class="label-group" ng-controller="LabelGroupCtrl as lgVm" label-group></div>
+      <div ng-view></div>
+    </div>
+  </body>
 </html>

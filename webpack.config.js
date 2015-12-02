@@ -77,6 +77,12 @@ module.exports = function(option) {
           'image-webpack?bypassOnDebug&optimizationLevel=7' // https://github.com/tcoopman/image-webpack-loader#bypassondebug-all
         ]
       }, {
+        test: /\.ico$/,
+        loaders: [
+          'url?limit=10000&name=res/img/[name].[ext]?[hash]',
+          'image-webpack?bypassOnDebug&optimizationLevel=7'
+        ]
+      }, {
         test: /\.(woff|woff2|ttf|otf|svg|eot)(\?.*?)?$/,
         loader: 'url?limit=10000&name=res/font/[name].[ext]?[hash]'
       }, {

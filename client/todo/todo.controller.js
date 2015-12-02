@@ -7,7 +7,7 @@
 'use strict';
 
 angular.module('todomvc')
-  .controller('TodoCtrl', function TodoCtrl(store, $scope, $filter, $routeParams, labelGroup) {
+  .controller('TodoCtrl', function TodoCtrl(store, $scope, $filter, $routeParams, labelGroup, $location) {
 
     var vm = this;
     vm.todos = $scope.todos = store.todos; // $scope.todos => to watch todos by $scope.$watch
@@ -23,13 +23,20 @@ angular.module('todomvc')
     }, true);
 
     // Monitor the current route for changes and adjust the filter accordingly.
-    $scope.$on('$routeChangeSuccess', function() {
+    $scope.$on('$routeChangeSuccess', function(e, current, previous) {
       var status = vm.status = $routeParams.status || '';
-      vm.statusFilter = status === 'active' ? {
-        completed: false
-      } : status === 'completed' ? {
-        completed: true
-      } : {};
+      if (status === 'active') {
+        vm.statusFilter = {
+          completed: false
+        };
+      } else if (status === 'completed') {
+        vm.statusFilter = {
+          completed: true
+        };
+      } else {
+        vm.statusFilter = {};
+        $location.path('/');
+      }
     });
 
     vm.addTodo = function() {

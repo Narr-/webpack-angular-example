@@ -2,7 +2,12 @@
   "engines": {
     "node": ">=4.2.0"
   },
-  "dependencies": {},
+  "dependencies": {
+    "compression": "^1.6.0",
+    "express": "^4.13.3",
+    "ip": "^1.1.0",
+    "winston": "^2.1.1"
+  },
   "devDependencies": {
     "angular": "^1.4.8",
     "angular-resource": "^1.4.8",
@@ -18,7 +23,6 @@
     "html-loader": "^0.4.0",
     "html-webpack-plugin": "^2.0.4",
     "image-webpack-loader": "^1.6.2",
-    "ip": "^1.1.0",
     "jscs": "^2.6.0",
     "jscs-loader": "^0.2.0",
     "jshint": "^2.5.0",

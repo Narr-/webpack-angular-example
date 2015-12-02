@@ -5,3 +5,4 @@ dist
 .csslintrc
 .scss-lint.yml
 sprite-*
+*.log

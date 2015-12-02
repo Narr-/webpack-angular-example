@@ -1,7 +1,13 @@
 'use strict';
 
 module.exports = angular.module('todomvc', ['ngResource', 'ngRoute'])
-  .config(function($routeProvider) {
+  .config(function($locationProvider, $routeProvider) {
+    $locationProvider.html5Mode({
+      enabled: true,
+      requireBase: true, // find "Server side" in https://docs.angularjs.org/guide/$location
+      rewriteLinks: true
+    });
+
     var routeConfig = {
       controller: 'TodoCtrl',
       controllerAs: 'todoVm',

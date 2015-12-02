@@ -7,6 +7,7 @@ var ip = require('ip');
 var webpackConfig = require('./webpack.config.js');
 var webpack = require('webpack');
 var WebpackDevServer = require('webpack-dev-server');
+var spawn = require('child_process').spawn; // https://nodejs.org/api/child_process.html#child_process_child_process_spawn_command_args_options
 
 ////////////////////////
 // The development server (the recommended option for development)
@@ -49,7 +50,7 @@ gulp.task('webpack:build', function(done) {
 
   var myIp = ip.address();
   var config = Object.create(webpackConfig({
-    publicPath: 'http://' + myIp + ':8080/'
+    publicPath: 'http://' + myIp + ':' + (process.env.PORT || 3000) + '/'
   }));
   // create a single instance of the compiler
   var compiler = webpack(config);
@@ -70,3 +71,11 @@ gulp.task('webpack:build', function(done) {
 });
 
 gulp.task('build', ['webpack:build']);
+
+////////////////////////
+// Start Server
+gulp.task('server', function(done) {
+  spawn('node', ['./server/server'], {
+    stdio: 'inherit'
+  });
+});
