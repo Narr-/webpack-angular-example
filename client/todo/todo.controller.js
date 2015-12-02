@@ -35,7 +35,9 @@ angular.module('todomvc')
         };
       } else {
         vm.statusFilter = {};
-        $location.path('/');
+        if (status) {
+          $location.path('/').replace();
+        }
       }
     });
 
