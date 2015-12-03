@@ -15,8 +15,10 @@
   "browser": true,
   "devel": true,
   "node": true,
+  "jasmine": true,
   "globals": {
     "WEBPACK_VAR": true,
-    "angular": true
+    "angular": true,
+    "inject": true
   }
 }

@@ -42,8 +42,20 @@ gulp.task('webpack-dev-server', function(done) {
 gulp.task('default', ['webpack-dev-server']);
 
 ////////////////////////
+// Unit test
+gulp.task('unit', function(done) {
+  var karma = spawn('node', ['node_modules/karma/bin/karma', 'start', 'test/client/karma.conf.js'], {
+    stdio: 'inherit'
+  });
+
+  karma.on('close', function(code) {
+    done(code);
+  });
+});
+
+////////////////////////
 // Production build
-gulp.task('webpack:build', function(done) {
+gulp.task('webpack:build', ['unit'], function(done) {
   del.sync('client/res/img/icon/sprite-*');
   del.sync('dist');
   gulp.src('client/label/label.json').pipe(gulp.dest('dist/res/json'));
@@ -75,7 +87,7 @@ gulp.task('build', ['webpack:build']);
 ////////////////////////
 // Start Server
 gulp.task('server', function(done) {
-  spawn('node', ['./server/server'], {
+  spawn('node', ['server/server'], {
     stdio: 'inherit'
   });
 });
