@@ -6,8 +6,7 @@ module.exports = function(option) {
 
   var appPath = __dirname + '/client';
   var distPath = __dirname + '/dist';
-  var labelJsonPath = debug ?
-    option.publicPath + 'client/label/label.json' : option.publicPath + 'res/json/label.json';
+  var labelJsonPath = debug ? './client/label/label.json' : './res/json/label.json';
 
   var webpack = require('webpack');
   var Sprite = require('sprite-webpack-plugin');

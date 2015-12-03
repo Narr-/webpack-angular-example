@@ -2,6 +2,7 @@
   "preset": "jquery",
   "disallowKeywordsOnNewLine": null,
   "maximumLineLength": null,
+  "requireCamelCaseOrUpperCaseIdentifiers": false,
   "requireCapitalizedComments": false,
   "requirePaddingNewLinesBeforeLineComments": null,
   "requireSpacesInsideArrayBrackets": null,

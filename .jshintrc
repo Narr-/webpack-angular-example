@@ -20,6 +20,10 @@
     "WEBPACK_VAR": true,
     "angular": true,
     "inject": true,
-    "expect": true
+    "browser": true,
+    "expect": true,
+    "element": true,
+    "$": true,
+    "by": true
   }
 }

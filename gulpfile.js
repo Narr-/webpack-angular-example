@@ -124,3 +124,34 @@ gulp.task('server', function(done) {
     stdio: 'inherit'
   });
 });
+
+////////////////////////
+// e2e
+var gp = require('gulp-protractor');
+
+// Download and update the selenium driver
+gulp.task('webdriver_update', gp.webdriver_update);
+
+gulp.task('e2e', ['webdriver_update'], function(done) {
+  var protractor = gp.protractor;
+
+  gulp.src([])
+    .pipe(protractor({
+      configFile: 'test/e2e/protractor.conf.js'
+    }))
+    .on('error', function(e) {
+      throw e;
+    });
+});
+
+gulp.task('e2e:firefox', ['webdriver_update'], function(done) {
+  var protractor = gp.protractor;
+
+  gulp.src([])
+    .pipe(protractor({
+      configFile: 'test/e2e/protractor.conf.firefox.js'
+    }))
+    .on('error', function(e) {
+      throw e;
+    });
+});
