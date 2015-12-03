@@ -8,6 +8,7 @@ var webpackConfig = require('./webpack.config.js');
 var webpack = require('webpack');
 var WebpackDevServer = require('webpack-dev-server');
 var spawn = require('child_process').spawn; // https://nodejs.org/api/child_process.html#child_process_child_process_spawn_command_args_options
+// var fs = require('fs'); // to write a log file(fs.writeFile('filename.txt', 'contents', cb);)
 
 ////////////////////////
 // The development server (the recommended option for development)
@@ -42,8 +43,8 @@ gulp.task('webpack-dev-server', function(done) {
 gulp.task('default', ['webpack-dev-server']);
 
 ////////////////////////
-// Unit test
-gulp.task('unit', function(done) {
+// Client Unit test
+gulp.task('unit-client', function(done) {
   var karma = spawn('node', ['node_modules/karma/bin/karma', 'start', 'test/client/karma.conf.js'], {
     stdio: 'inherit'
   });
@@ -52,6 +53,38 @@ gulp.task('unit', function(done) {
     done(code);
   });
 });
+
+////////////////////////
+// Server Unit test
+gulp.task('lint-server', function() {
+  var jshint = require('gulp-jshint');
+  var jscs = require('gulp-jscs');
+
+  return gulp.src('server/**/*.js')
+    .pipe(jshint())
+    .pipe(jshint.reporter('default'))
+    .pipe(jshint.reporter('fail'))
+    .pipe(jscs())
+    .pipe(jscs.reporter())
+    .pipe(jscs.reporter('fail'));
+});
+
+gulp.task('unit-server', ['lint-server'], function() {
+  del.sync('./test/server/coverage');
+
+  var mocha = require('gulp-spawn-mocha');
+  return gulp.src(['server/**/*.spec.js'])
+    .pipe(mocha({
+      istanbul: {
+        dir: 'test/server/coverage',
+        x: '*.spec.js', // exculde pattern // "istanbul help cover" on terminal
+        report: ['html'],
+        print: 'none'
+      }
+    }));
+});
+
+gulp.task('unit', ['unit-client', 'unit-server']);
 
 ////////////////////////
 // Production build

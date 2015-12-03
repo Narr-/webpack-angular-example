@@ -19,6 +19,7 @@
   "globals": {
     "WEBPACK_VAR": true,
     "angular": true,
-    "inject": true
+    "inject": true,
+    "expect": true
   }
 }
