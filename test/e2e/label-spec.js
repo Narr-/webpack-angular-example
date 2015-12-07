@@ -1,8 +1,9 @@
+'use strict';
+
 describe('load labels', function() {
-  'use strict';
 
   beforeEach(function() {
-    browser.get('http://localhost:3000');
+    browser.get('http://localhost:' + require('../../server/config').PORT);
   });
 
   it('should have 7 labels', function() {

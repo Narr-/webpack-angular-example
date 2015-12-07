@@ -7,8 +7,6 @@ module.exports = function(config) {
   del.sync(coveragePath);
   var srcBasePath = path.join(__dirname, '../../client');
   var webpack = require('webpack');
-  var ip = require('ip').address();
-  var labelJsonPath = 'http://' + ip + ':' + (process.env.PORT || 3000) + '/';
 
   config.set({
     basePath: '',
@@ -73,7 +71,7 @@ module.exports = function(config) {
             mode: {
               production: false
             },
-            labelJsonPath: JSON.stringify(labelJsonPath)
+            labelJsonPath: JSON.stringify('./client/label/label.json')
           }
         })
       ],
