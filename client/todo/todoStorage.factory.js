@@ -79,7 +79,7 @@ angular.module('todomvc')
 
     put: function(todo) {
       return store.api.update({
-          id: todo.id
+          id: todo._id
         }, todo)
         .$promise;
     }

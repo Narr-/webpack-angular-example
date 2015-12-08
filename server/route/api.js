@@ -17,6 +17,7 @@ var timeout = require('connect-timeout');
 var TodoModel = require('../model/todo');
 
 router.use(timeout('5s'));
+
 router.get('/', function(req, res) {
   promise.then(function(result) {
     res.json({
@@ -53,11 +54,33 @@ router.route('/todos')
     todoModel.save(function(err, data) {
       if (err) {
         logger.error(err);
-        res.status(400).json(err);
+        res.status(500).json({
+          'message': 'Error adding data'
+        });
       } else {
         res.json({
           id: data._id,
           message: 'Data added'
+        });
+      }
+    });
+  });
+
+router.route('/todos/:id')
+  .put(function(req, res) {
+    TodoModel.findByIdAndUpdate(req.params.id, {
+      title: req.body.title,
+      completed: req.body.completed
+    }, function(err, data) {
+      if (err) {
+        logger.error(err);
+        res.status(500).json({
+          'message': 'Error updating data'
+        });
+      } else {
+        res.json({
+          id: data._id,
+          message: 'Data updated'
         });
       }
     });
