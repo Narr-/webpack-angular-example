@@ -32,15 +32,16 @@ router.get('/', function(req, res) {
 });
 router.route('/todos')
   .get(function(req, res, next) {
-    TodoModel.find({}, function(err, data) { // Mongo command to fetch all data from collection.
+    TodoModel.find({}, function(err, docs) { // Mongo command to fetch all docs from collection.
       if (err) {
         logger.error(err);
+        // res.send(err);
         res.status(500).json({
           'message': 'Error fetching data'
         });
       } else {
-        logger.debug(data.toString());
-        res.json(data);
+        logger.debug(docs.toString());
+        res.json(docs);
       }
     });
   })
@@ -51,7 +52,7 @@ router.route('/todos')
     if (completed === true || completed === false || completed === 'true' || completed === 'false') {
       todoModel.completed = completed;
     }
-    todoModel.save(function(err, data) {
+    todoModel.save(function(err, doc) {
       if (err) {
         logger.error(err);
         res.status(500).json({
@@ -59,8 +60,25 @@ router.route('/todos')
         });
       } else {
         res.json({
-          id: data._id,
+          _id: doc._id,
           message: 'Data added'
+        });
+      }
+    });
+  })
+  .delete(function(req, res) {
+    TodoModel.remove({
+      completed: true
+    }, function(err, removed) {
+      if (err) {
+        logger.error(err);
+        res.status(500).json({
+          'message': 'Error deleting data'
+        });
+      } else {
+        res.json({
+          n: removed.result.n,
+          message: 'Data deleted'
         });
       }
     });
@@ -71,7 +89,7 @@ router.route('/todos/:id')
     TodoModel.findByIdAndUpdate(req.params.id, {
       title: req.body.title,
       completed: req.body.completed
-    }, function(err, data) {
+    }, function(err, doc) {
       if (err) {
         logger.error(err);
         res.status(500).json({
@@ -79,8 +97,23 @@ router.route('/todos/:id')
         });
       } else {
         res.json({
-          id: data._id,
+          _id: doc._id,
           message: 'Data updated'
+        });
+      }
+    });
+  })
+  .delete(function(req, res) {
+    TodoModel.findByIdAndRemove(req.params.id, function(err, doc) {
+      if (err) {
+        logger.error(err);
+        res.status(500).json({
+          'message': 'Error deleting data'
+        });
+      } else {
+        res.json({
+          _id: doc._id,
+          message: 'Data deleted'
         });
       }
     });
