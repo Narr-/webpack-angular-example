@@ -15,6 +15,7 @@ var promise = new Promise(function(resolve, reject) {
 var router = require('express').Router();
 var timeout = require('connect-timeout');
 var TodoModel = require('../model/todo');
+var io = require('../socket')();
 
 router.use(timeout('5s'));
 
@@ -26,7 +27,7 @@ router.get('/', function(req, res) {
   }, function(err) {
     logger.error(err.name, err);
     res.status(503).json({
-      'message': 'DB connection Error..!!'
+      message: 'DB connection Error..!!'
     });
   });
 });
@@ -37,7 +38,7 @@ router.route('/todos')
         logger.error(err);
         // res.send(err);
         res.status(500).json({
-          'message': 'Error fetching data'
+          message: 'Error fetching data'
         });
       } else {
         logger.debug(docs.toString());
@@ -56,11 +57,14 @@ router.route('/todos')
       if (err) {
         logger.error(err);
         res.status(500).json({
-          'message': 'Error adding data'
+          message: 'Error adding data'
         });
       } else {
         res.json({
           _id: doc._id,
+          message: 'Data added'
+        });
+        io.sockets.connected[req.body.socketId].broadcast.emit('dbChange', {
           message: 'Data added'
         });
       }
@@ -73,7 +77,7 @@ router.route('/todos')
       if (err) {
         logger.error(err);
         res.status(500).json({
-          'message': 'Error deleting data'
+          message: 'Error deleting data'
         });
       } else {
         res.json({
@@ -93,11 +97,14 @@ router.route('/todos/:id')
       if (err) {
         logger.error(err);
         res.status(500).json({
-          'message': 'Error updating data'
+          message: 'Error updating data'
         });
       } else {
         res.json({
           _id: doc._id,
+          message: 'Data updated'
+        });
+        io.sockets.connected[req.body.socketId].broadcast.emit('dbChange', {
           message: 'Data updated'
         });
       }
@@ -108,7 +115,7 @@ router.route('/todos/:id')
       if (err) {
         logger.error(err);
         res.status(500).json({
-          'message': 'Error deleting data'
+          message: 'Error deleting data'
         });
       } else {
         res.json({

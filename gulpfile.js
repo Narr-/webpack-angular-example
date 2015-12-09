@@ -36,6 +36,9 @@ gulp.task('webpack-dev-server', function() {
     proxy: {
       '/api*': {
         target: 'http://localhost:' + require('./server/config').PORT
+      },
+      '/socket.io*': {
+        target: 'http://localhost:' + require('./server/config').PORT
       }
     }
   }).listen(port, !onlyThisHost ? null : 'localhost', function(err) {

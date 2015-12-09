@@ -109,6 +109,9 @@ module.exports = function(option) {
     },
     plugins: [
       new webpack.DefinePlugin(webpackDefineObj),
+      new webpack.ProvidePlugin({
+        io: 'socket.io-client'
+      }),
       new Sprite({
         'source': appPath + '/res/img/icon/',
         'imgPath': appPath + '/res/img/icon/',

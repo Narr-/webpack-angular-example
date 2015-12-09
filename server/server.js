@@ -3,6 +3,11 @@
 var logger = require('./util/logger')(module);
 var express = require('express');
 var app = express();
+var session = require('express-session')({
+  secret: 'webpack ng',
+  resave: false,
+  saveUninitialized: false
+});
 var morgan = require('morgan');
 var bodyParser = require('body-parser');
 var compression = require('compression');
@@ -10,7 +15,10 @@ var path = require('path');
 var root = path.join(__dirname, '../dist');
 var indexPath = path.join(root, 'index.html');
 var config = require('./config');
+var server = require('./socket')(app).server;
+var io = require('./socket')();
 
+app.use(session);
 app.use(morgan('combined', {
   'stream': logger.stream
 }));
@@ -25,7 +33,7 @@ app.get('*', function(req, res) {
   res.sendFile(indexPath);
 });
 
-app
+server
   .listen(config.PORT, function(err) {
     logger.info('Our app is running on http://localhost:' + config.PORT);
   })

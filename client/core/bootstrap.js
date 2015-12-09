@@ -5,6 +5,7 @@ require('index.scss');
 
 var appModule = require('index');
 require('todo/todo.controller');
+require('todo/todoSocket.factory');
 require('todo/todoStorage.factory');
 require('todo/todoFocus.directive');
 require('todo/todoEscape.directive');

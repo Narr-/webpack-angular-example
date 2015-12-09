@@ -20,7 +20,7 @@ angular.module('todomvc')
       });
   })
 
-.factory('api', function($resource) {
+.factory('api', function($resource, todoSocket) {
   var store = {
     todos: [],
 
@@ -39,7 +39,11 @@ angular.module('todomvc')
 
       angular.copy(incompleteTodos, store.todos);
 
-      return store.api.delete(function() {}, function error() {
+      return store.api.delete(function success() {
+        todoSocket.emit('dbChange', {
+          message: 'Data deleted'
+        });
+      }, function error() {
         angular.copy(originalTodos, store.todos);
       });
     },
@@ -51,7 +55,11 @@ angular.module('todomvc')
       return store.api.delete({
           id: todo._id
         },
-        function() {},
+        function sucess() {
+          todoSocket.emit('dbChange', { // socket emits here cos can't add postData(payload) to DELETE Method
+            message: 'Data deleted'
+          });
+        },
         function error() {
           angular.copy(originalTodos, store.todos);
         });
@@ -65,7 +73,7 @@ angular.module('todomvc')
 
     insert: function(todo) {
       var originalTodos = store.todos.slice(0);
-
+      todo.socketId = todoSocket.id;
       return store.api.save(todo,
           function success(resp) {
             todo._id = resp._id;
@@ -78,12 +86,20 @@ angular.module('todomvc')
     },
 
     put: function(todo) {
+      todo.socketId = todoSocket.id;
       return store.api.update({
           id: todo._id
         }, todo)
         .$promise;
     }
   };
+
+  todoSocket.on('dbChange', function(data) {
+    if (!WEBPACK_VAR.mode.production) {
+      console.log('from socket %O', data);
+    }
+    store.get();
+  });
 
   return store;
 })
