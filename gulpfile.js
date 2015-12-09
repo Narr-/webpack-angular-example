@@ -3,6 +3,7 @@
 var gulp = require('gulp');
 var gutil = require('gulp-util');
 var del = require('del');
+var ip = require('ip');
 var webpackConfig = require('./webpack.config.js');
 var webpack = require('webpack');
 var WebpackDevServer = require('webpack-dev-server');
@@ -20,8 +21,9 @@ gulp.task('webpack-dev-server', function() {
   // https://nodejs.org/api/net.html#net_server_listen_port_hostname_backlog_callback
   // if true, can't access by current ip but localhost
   var onlyThisHost = false;
+  var myIp = ip.address(); // localhost
   var port = 8080;
-  var publicPath = 'http://localhost:' + port + '/';
+  var publicPath = 'http://' + myIp + ':' + port + '/';
   var devConfig = Object.create(webpackConfig({
     debug: true,
     publicPath: publicPath
@@ -35,10 +37,10 @@ gulp.task('webpack-dev-server', function() {
     },
     proxy: {
       '/api*': {
-        target: 'http://localhost:' + require('./server/config').PORT
+        target: 'http://' + myIp + ':' + require('./server/config').PORT
       },
       '/socket.io*': {
-        target: 'http://localhost:' + require('./server/config').PORT
+        target: 'http://' + myIp + ':' + require('./server/config').PORT
       }
     }
   }).listen(port, !onlyThisHost ? null : 'localhost', function(err) {
