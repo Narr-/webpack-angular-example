@@ -3,12 +3,10 @@
 var logger = require('./util/logger')(module);
 var express = require('express');
 var app = express();
-app.enable('trust proxy'); // or req.headers['x-forwarded-for'] || req.connection.remoteAddress
-var session = require('express-session')({
-  secret: 'webpack ng',
-  resave: false,
-  saveUninitialized: false
-});
+var redis = require('redis');
+var redisClient = redis.createClient();
+var session = require('express-session');
+var RedisStore = require('connect-redis')(session);
 var morgan = require('morgan');
 var bodyParser = require('body-parser');
 var compression = require('compression');
@@ -19,7 +17,15 @@ var config = require('./config');
 var server = require('./socket')(app).server;
 var io = require('./socket')();
 
-app.use(session);
+app.enable('trust proxy'); // or req.headers['x-forwarded-for'] || req.connection.remoteAddress
+app.use(session({
+  store: new RedisStore({
+    client: redisClient
+  }),
+  secret: 'webpack ng',
+  resave: false,
+  saveUninitialized: false
+}));
 app.use(morgan('combined', {
   'stream': logger.stream
 }));
