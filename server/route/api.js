@@ -60,7 +60,7 @@ router.post('/', function(req, res) {
               message: 'hooray! welcome to our api! New User Id'
             });
           } else {
-            logger.debug(doc);
+            // logger.debug(doc.toString());
             userId = doc.userId;
             req.session.userId = userId;
             res.json({
@@ -90,7 +90,7 @@ router.route('/todos')
           message: 'Error fetching data'
         });
       } else {
-        logger.debug(docs.toString());
+        // logger.debug(docs.toString());
         res.json(docs);
       }
     });

@@ -3,6 +3,7 @@
 var logger = require('./util/logger')(module);
 var express = require('express');
 var app = express();
+app.enable('trust proxy'); // or req.headers['x-forwarded-for'] || req.connection.remoteAddress
 var session = require('express-session')({
   secret: 'webpack ng',
   resave: false,
