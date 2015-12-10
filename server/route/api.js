@@ -16,14 +16,61 @@ var router = require('express').Router();
 var timeout = require('connect-timeout');
 var TodoModel = require('../model/todo');
 var io = require('../socket')();
+var uuid = require('node-uuid');
 
 router.use(timeout('5s'));
 
-router.get('/', function(req, res) {
+router.post('/', function(req, res) {
+  var userId;
+
+  if (req.body.userId) {
+    userId = true;
+    req.session.userId = req.body.userId;
+  } else if (req.session.userId) {
+    userId = req.session.userId;
+  }
+
   promise.then(function(result) {
-    res.json({
-      message: 'hooray! welcome to our api!'
-    });
+    if (userId) {
+      if (userId === true) {
+        res.json({
+          message: 'hooray! welcome to our api!'
+        });
+      } else {
+        res.json({
+          userId: userId,
+          message: 'hooray! welcome to our api!'
+        });
+      }
+    } else {
+      TodoModel.findOne({
+        userIp: req.ip
+      }, function(err, doc) {
+        if (err) {
+          logger.error(err);
+          res.status(500).json({
+            message: 'Error fetching userId'
+          });
+        } else {
+          if (doc === null) {
+            userId = uuid.v1();
+            req.session.userId = userId;
+            res.json({
+              userId: userId,
+              message: 'hooray! welcome to our api! New User Id'
+            });
+          } else {
+            logger.debug(doc);
+            userId = doc.userId;
+            req.session.userId = userId;
+            res.json({
+              userId: userId,
+              message: 'hooray! welcome to our api! retrieved userId'
+            });
+          }
+        }
+      });
+    }
   }, function(err) {
     logger.error(err.name, err);
     res.status(503).json({
@@ -33,7 +80,9 @@ router.get('/', function(req, res) {
 });
 router.route('/todos')
   .get(function(req, res, next) {
-    TodoModel.find({}, function(err, docs) { // Mongo command to fetch all docs from collection.
+    TodoModel.find({
+      userId: req.session.userId
+    }, function(err, docs) { // Mongo command to fetch all docs from collection.
       if (err) {
         logger.error(err);
         // res.send(err);
@@ -48,6 +97,8 @@ router.route('/todos')
   })
   .post(function(req, res) {
     var todoModel = new TodoModel();
+    todoModel.userId = req.session.userId;
+    todoModel.userIp = req.ip;
     todoModel.title = req.body.title;
     var completed = req.body.completed;
     if (completed === true || completed === false || completed === 'true' || completed === 'false') {
@@ -64,7 +115,8 @@ router.route('/todos')
           _id: doc._id,
           message: 'Data added'
         });
-        io.sockets.connected[req.body.socketId].broadcast.emit('dbChange', {
+        // emit msg to the room this socket joined to except this socket
+        io.sockets.connected[req.body.socketId].to(req.session.userId).emit('dbChange', {
           message: 'Data added'
         });
       }
@@ -104,7 +156,7 @@ router.route('/todos/:id')
           _id: doc._id,
           message: 'Data updated'
         });
-        io.sockets.connected[req.body.socketId].broadcast.emit('dbChange', {
+        io.sockets.connected[req.body.socketId].to(req.session.userId).emit('dbChange', {
           message: 'Data updated'
         });
       }

@@ -3,9 +3,17 @@
 var mongoose = require('mongoose');
 // create schema
 var todoSchema = new mongoose.Schema({
+  'userId': {
+    type: String,
+    required: true
+  },
+  'userIp': {
+    type: String,
+    required: true
+  },
   'title': {
     type: String,
-    required: false
+    required: true
   },
   'completed': {
     type: Boolean,

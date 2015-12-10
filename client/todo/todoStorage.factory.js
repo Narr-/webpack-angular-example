@@ -12,8 +12,13 @@ angular.module('todomvc')
   .factory('todoStorage', function($http, $injector) {
     // Detect if an API backend is present. If so, return the API module, else
     // hand off the localStorage adapter
-    return $http.get('/api')
-      .then(function() {
+    return $http.post('/api', {
+        userId: localStorage.getItem('dbUserId')
+      })
+      .then(function(response) {
+        if (response.data && response.data.userId) {
+          localStorage.setItem('dbUserId', response.data.userId);
+        }
         return $injector.get('api');
       }, function() {
         return $injector.get('localStorage');
@@ -40,9 +45,15 @@ angular.module('todomvc')
       angular.copy(incompleteTodos, store.todos);
 
       return store.api.delete(function success() {
-        todoSocket.emit('dbChange', {
-          message: 'Data deleted'
-        });
+        var userId = localStorage.getItem('dbUserId');
+        if (userId) {
+          todoSocket.emit('dbChange', {
+            message: 'Data deleted',
+            dataObj: {
+              userId: userId
+            }
+          });
+        }
       }, function error() {
         angular.copy(originalTodos, store.todos);
       });
@@ -56,9 +67,15 @@ angular.module('todomvc')
           id: todo._id
         },
         function sucess() {
-          todoSocket.emit('dbChange', { // socket emits here cos can't add postData(payload) to DELETE Method
-            message: 'Data deleted'
-          });
+          var userId = localStorage.getItem('dbUserId');
+          if (userId) {
+            todoSocket.emit('dbChange', { // socket emits here cos can't add postData(payload) to DELETE Method
+              message: 'Data deleted',
+              dataObj: {
+                userId: userId
+              }
+            });
+          }
         },
         function error() {
           angular.copy(originalTodos, store.todos);
@@ -93,6 +110,18 @@ angular.module('todomvc')
         .$promise;
     }
   };
+
+  todoSocket.on('connect', function(data) {
+    var userId = localStorage.getItem('dbUserId');
+    if (userId) {
+      todoSocket.emit('join', {
+        message: 'join the userId\'s room',
+        dataObj: {
+          userId: userId
+        }
+      });
+    }
+  });
 
   todoSocket.on('dbChange', function(data) {
     if (!WEBPACK_VAR.mode.production) {
