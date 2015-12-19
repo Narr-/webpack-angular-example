@@ -3,8 +3,9 @@
 var logger = require('./util/logger')(module);
 var express = require('express');
 var app = express();
+var config = require('./config');
 var redis = require('redis');
-var redisClient = redis.createClient();
+var redisClient = redis.createClient(config.REDIS_PORT, config.REDIS_HOST);
 var session = require('express-session');
 var RedisStore = require('connect-redis')(session);
 var morgan = require('morgan');
@@ -13,7 +14,6 @@ var compression = require('compression');
 var path = require('path');
 var root = path.join(__dirname, '../dist');
 var indexPath = path.join(root, 'index.html');
-var config = require('./config');
 var server = require('./socket')(app).server;
 var io = require('./socket')();
 
