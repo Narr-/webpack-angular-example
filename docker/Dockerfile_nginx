@@ -1,0 +1,6 @@
+FROM nginx
+
+# Copy custom configuration file from the current directory
+COPY ./nginx/nginx.conf /etc/nginx/nginx.conf
+COPY ./nginx/sites-enabled /etc/nginx/sites-enabled
+COPY ./dist /webpack-angular-example/dist

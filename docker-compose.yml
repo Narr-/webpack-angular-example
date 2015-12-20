@@ -1,5 +1,13 @@
+nginx:
+  build: .
+  dockerfile: ./docker/Dockerfile_nginx
+  links:
+      - node
+  ports:
+      - "8000:80"
 node:
   build: .
+  dockerfile: ./docker/Dockerfile_node
   ports:
    - "3001:3000"
   volumes:
@@ -15,3 +23,5 @@ redis:
 
 mongo:
   image: mongo
+  ports:
+   - "27017:27017"
