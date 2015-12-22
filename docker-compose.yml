@@ -4,12 +4,12 @@ nginx:
   links:
       - node
   ports:
-      - "8000:80"
+      - "8000:80" # "HOST_PORT:CONTAINER_PORT"
 node:
   build: .
   dockerfile: ./docker/Dockerfile_node
   ports:
-   - "3001:3000"
+   - "3000:3000"
   volumes:
    - ./server:/src
   links:
