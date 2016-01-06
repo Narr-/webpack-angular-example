@@ -72,8 +72,6 @@ gulp.task('build', function(cb) {
       if (err.module.errors.length > 0) {
         console.log(err.module.errors[0].error); // show the error detail e.g. jshint or jscs loader
       }
-      console.log("test test test..!!");
-      cb();
       throw new gutil.PluginError('webpack:build', err);
     }
     gutil.log('[webpack:build]', stats.toString({
