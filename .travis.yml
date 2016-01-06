@@ -3,6 +3,7 @@ language: node_js
 node_js:
   - "4"
 
+# @ Node.js v4 (or io.js v3) compiler requirements
 env:
   - CXX=g++-4.8
 
@@ -12,6 +13,7 @@ addons:
       - ubuntu-toolchain-r-test
     packages:
       - g++-4.8
+# Node.js v4 (or io.js v3) compiler requirements @
 
 install:
   - npm install -g gulp
@@ -25,13 +27,15 @@ before_script:
 
 script:
   - gulp build
-  #- grunt server:dist & # run a command in the background by appending '&'
+  #- gulp server:dist & # run a command in the background by appending '&'
   #- sleep 3 # give a server some time for it to start
-  #- grunt e2e:firefox
+  #- gulp e2e:firefox
 
 # Note that pull request builds skip deployment step altogether.
 before_deploy:
-  - rm -rf ./node_modules
+  - mkdir heroku
+  - mv ./package.json ./server ./dist ./heroku
+  - cd ./heroku # a directory that will be deployed
 
 deploy:
   provider: heroku
