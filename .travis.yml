@@ -1,0 +1,29 @@
+language: node_js
+
+node_js:
+  - "node"
+
+install:
+  - npm install -g gulp
+  - npm install
+
+before_script:
+  # @ open FireFox
+  - export DISPLAY=:99.0
+  - sh -e /etc/init.d/xvfb start
+  # open FireFox @
+
+script:
+  - gulp build
+  #- grunt server:dist & # run a command in the background by appending '&'
+  #- sleep 3 # give a server some time for it to start
+  #- grunt e2e:firefox
+
+# Note that pull request builds skip deployment step altogether.
+deploy:
+  provider: heroku
+  api_key:
+    secure: jpp3uoaAwTBJELvkkdm+CViiaTd/ccTtydpoMVe1d34dcQyomRhSB1spIHo8JINhsqQ3nbrIZJZNWywy0Bk28bphIVXlqBUUPVhaUYmB/XXveiTxJ7YAOtLZ8SLB+yiRc/68x9D11BxnvEBus+ng1FiKYeRBiqcWyS0lqWZNMoLM7BxesjTB9TonJfbvQgoOIqq/jH/MXjMdwhlzGGduOo9WQOnM8viaV8zWrge5vKl/Zoq4hYSLaZdc+wv5eBbO0hTWJ+InshvfyCZVIpOg7PAru2LSebh7osSlYr6/RRVcThrVRUzgdqIemi2cIhiNtn054LsBf/1U3iXQVPxDlqCZNiJTrpQDqNky/Qu1c1ZWWNCtHm44KcLomj5RfLNN3fnnLd5DZy+LTMYuDWsBsRLSzOJOli/m2KEh36zvYcNxHxtjtOVWh5tRju60uE7jTgpLzXNUJGw5GthqCkjRjvdwWXwiNv8D3LgSBJ2RNEEDb7G0ic7IoMLtDM3168mNYL8UupMIfOc79WxFSvN4aDbTQbqdzshLZuWOtMcx/dLDL0ZWp+d5dSNdPP09MBIfGOAizBqtrHkoSCJ3Dr14jf0xH0k2G+CATumjlE5qwyWWOoFhLo+UfPzDmCCvsGCtDMQ4r4nHU1oKiZjX7g9WfGPyuOCc7MoD6ivHcYHzUeU=
+  strategy: git
+  app: webpack-ng-example
+  skip_cleanup: true
