@@ -7,6 +7,10 @@ module.exports = function(server) {
   if (instance === null) {
     var io = require('socket.io').listen(server);
     instance = io;
+    var redis = require('socket.io-redis');
+    var config = require('./config');
+    io.adapter(redis(config.REDIS_URL));
+
     // io.set('transports', ['websocket']);
     io.on('connection', function(socket) {
       logger.info('socket id: ' + socket.id + ' is connected..!!');
