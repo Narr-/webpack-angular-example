@@ -13,11 +13,13 @@ COPY ./server /webpack-angular-example/server
 COPY ./package.json /webpack-angular-example
 
 # Install globla plugins
-RUN npm install -g pm2
+# RUN npm install -g pm2
 
 # Install app dependencies
 RUN cd /webpack-angular-example; npm install --production
 
 # CMD ["executable","param1","param2"]
 # CMD ["node", "/webpack-angular-example/server/server.js"]
-CMD ["pm2", "start", "/webpack-angular-example/server/server.js", "-i", "0", "--no-daemon"]
+# CMD ["pm2", "start", "/webpack-angular-example/server/server.js", "-i", "0", "--no-daemon"]
+WORKDIR /webpack-angular-example
+CMD ["npm", "start"]

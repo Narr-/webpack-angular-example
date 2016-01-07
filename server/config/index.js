@@ -2,6 +2,7 @@
 
 var env = process.env;
 var port = env.PORT || 3000;
+var dockerMachineIp = '192.168.99.100';
 var redisUrl;
 var mongoUri;
 
@@ -12,8 +13,8 @@ if (env.DOCKER_ENV) {
   redisUrl = env.REDIS_URL;
   mongoUri = env.MONGOLAB_URI;
 } else {
-  redisUrl = 'redis://localhost:6379';
-  mongoUri = 'mongodb://localhost:27017/todoDb';
+  redisUrl = 'redis://' + dockerMachineIp + ':6379';
+  mongoUri = 'mongodb://' + dockerMachineIp + ':27017/todoDb';
 }
 
 module.exports = {

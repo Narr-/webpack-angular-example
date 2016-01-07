@@ -28,7 +28,8 @@ gulp.task('webpack-dev-server', function() {
     debug: true,
     publicPath: publicPath
   }));
-  var proxyAddr = '192.168.99.100:8000'; // server IP and PORT
+  // var proxyAddr = '192.168.99.100:8000'; // server IP and PORT
+  var proxyAddr = 'localhost:3000';
 
   // Start a webpack-dev-server
   new WebpackDevServer(webpack(devConfig), {

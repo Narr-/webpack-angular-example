@@ -11,6 +11,7 @@ node:
   ports:
    - "3000:3000"
   volumes:
+   # - ./server:/webpack-angular-example/server
    - ./server:/src
   links:
    - redis
@@ -20,6 +21,8 @@ node:
 
 redis:
   image: redis
+  ports:
+   - "6379:6379"
 
 mongo:
   image: mongo
