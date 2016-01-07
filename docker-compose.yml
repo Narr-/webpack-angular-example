@@ -6,6 +6,7 @@ nginx:
   ports:
       - "8000:80" # "HOST_PORT:CONTAINER_PORT"
 node:
+  cpuset: 0,1
   build: .
   dockerfile: ./docker/Dockerfile_node
   ports:
