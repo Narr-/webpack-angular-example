@@ -3,10 +3,11 @@
 var logger = require('./util/logger')(module);
 var instance = null;
 
-module.exports = function(app) {
+module.exports = function(server) {
   if (instance === null) {
-    var io = require('socket.io').listen(app);
+    var io = require('socket.io').listen(server);
     instance = io;
+    io.set('transports', ['websocket']);
     io.on('connection', function(socket) {
       logger.info('socket id: ' + socket.id + ' is connected..!!');
 
