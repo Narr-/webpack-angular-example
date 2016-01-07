@@ -26,14 +26,15 @@ before_script:
   # open FireFox @
 
 script:
-  - gulp build
-  #- gulp server:dist & # run a command in the background by appending '&'
-  #- sleep 3 # give a server some time for it to start
-  #- gulp e2e:firefox
+  - gulp bu
+  - gulp server & # run a command in the background by appending '&'
+  - sleep 3 # give a server some time for it to start
+  - gulp e2e:firefox
 
 # Note that pull request builds skip deployment step altogether.
 before_deploy:
-  - mkdir heroku
+  - rm -rf ./server/log
+  - mkdir ./heroku
   - mv ./package.json ./server ./dist ./heroku
   - cd ./heroku # a directory that will be deployed
 

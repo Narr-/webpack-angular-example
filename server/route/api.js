@@ -4,7 +4,7 @@ var logger = require('../util/logger')(module);
 var mongoose = require('mongoose');
 var config = require('../config');
 var promise = new Promise(function(resolve, reject) {
-  mongoose.connect(config.DB, function(err) {
+  mongoose.connect(config.MONGO_URI, function(err) {
     if (err) {
       reject(err);
     } else {
@@ -23,10 +23,14 @@ router.use(timeout('5s'));
 router.post('/', function(req, res) {
   var userId;
 
+  logger.debug('session: ', req.session);
+
   if (req.body.userId) {
     userId = true;
-    req.session.userId = req.body.userId;
-  } else if (req.session.userId) {
+    if (req.session) {
+      req.session.userId = req.body.userId;
+    }
+  } else if (req.session && req.session.userId) {
     userId = req.session.userId;
   }
 
@@ -54,7 +58,9 @@ router.post('/', function(req, res) {
         } else {
           if (doc === null) {
             userId = uuid.v1();
-            req.session.userId = userId;
+            if (req.session) {
+              req.session.userId = userId;
+            }
             res.json({
               userId: userId,
               message: 'hooray! welcome to our api! New User Id'
@@ -62,7 +68,9 @@ router.post('/', function(req, res) {
           } else {
             // logger.debug(doc.toString());
             userId = doc.userId;
-            req.session.userId = userId;
+            if (req.session) {
+              req.session.userId = userId;
+            }
             res.json({
               userId: userId,
               message: 'hooray! welcome to our api! retrieved userId'

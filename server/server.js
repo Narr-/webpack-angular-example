@@ -5,7 +5,7 @@ var express = require('express');
 var app = express();
 var config = require('./config');
 var redis = require('redis');
-var redisClient = redis.createClient(config.REDIS_PORT, config.REDIS_HOST);
+var redisClient = redis.createClient(config.REDIS_URL);
 var session = require('express-session');
 var RedisStore = require('connect-redis')(session);
 var morgan = require('morgan');
@@ -15,7 +15,6 @@ var path = require('path');
 var root = path.join(__dirname, '../dist');
 var indexPath = path.join(root, 'index.html');
 var server = require('./socket')(app).server;
-var io = require('./socket')();
 
 app.enable('trust proxy'); // or req.headers['x-forwarded-for'] || req.connection.remoteAddress
 app.use(session({

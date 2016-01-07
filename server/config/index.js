@@ -2,18 +2,22 @@
 
 var env = process.env;
 var port = env.PORT || 3000;
-var dbHost = 'localhost';
-var redisHost = 'localhost';
+var redisUrl;
+var mongoUri;
+
 if (env.DOCKER_ENV) {
-  dbHost = 'mongo';
-  redisHost = 'redis';
+  redisUrl = 'redis://redis:6379'
+  mongoUri = 'mongodb://mongo:27017/todoDb';
+} else if (env.DYNO) { // HEROKU
+  redisUrl = env.REDIS_URL
+  mongoUri = env.MONGOLAB_URI
+} else {
+  redisUrl = 'redis://localhost:6379'
+  mongoUri = 'mongodb://localhost:27017/todoDb';
 }
-var mongo = 'mongodb://' + dbHost + ':27017/todoDb';
-var redisPort = 6379;
 
 module.exports = {
   PORT: port,
-  DB: mongo,
-  REDIS_HOST: redisHost,
-  REDIS_PORT: redisPort
+  REDIS_URL: redisUrl,
+  MONGO_URI: mongoUri
 };
