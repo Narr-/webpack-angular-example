@@ -5,8 +5,7 @@ var instance = null;
 
 module.exports = function(app) {
   if (instance === null) {
-    var server = require('http').createServer(app);
-    var io = require('socket.io')(server);
+    var io = require('socket.io').listen(app);
     instance = io;
     io.on('connection', function(socket) {
       logger.info('socket id: ' + socket.id + ' is connected..!!');
@@ -25,11 +24,6 @@ module.exports = function(app) {
         socket.to(data.dataObj.userId).emit('dbChange', data);
       });
     });
-    return {
-      server: server,
-      io: io
-    };
-  } else {
-    return instance;
   }
+  return instance;
 };

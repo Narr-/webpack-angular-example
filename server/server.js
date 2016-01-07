@@ -14,7 +14,8 @@ var compression = require('compression');
 var path = require('path');
 var root = path.join(__dirname, '../dist');
 var indexPath = path.join(root, 'index.html');
-var server = require('./socket')(app).server;
+var server = require('http').createServer(app);
+require('./socket')(server); // http://stackoverflow.com/questions/25013735/socket-io-nodejs-doesnt-work-on-heroku
 
 app.enable('trust proxy'); // or req.headers['x-forwarded-for'] || req.connection.remoteAddress
 app.use(session({
