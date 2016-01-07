@@ -124,6 +124,10 @@ module.exports = function(option) {
     ],
     resolve: {
       root: appPath // for require
+    },
+    node: { // https://github.com/hapijs/joi/issues/665, http://webpack.github.io/docs/configuration.html#node
+      tls: 'empty',
+      fs: 'empty'
     }
   };
 
