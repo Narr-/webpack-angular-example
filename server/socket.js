@@ -7,7 +7,7 @@ module.exports = function(server) {
   if (instance === null) {
     var io = require('socket.io').listen(server);
     instance = io;
-    io.set('transports', ['websocket']);
+    // io.set('transports', ['websocket']);
     io.on('connection', function(socket) {
       logger.info('socket id: ' + socket.id + ' is connected..!!');
 
