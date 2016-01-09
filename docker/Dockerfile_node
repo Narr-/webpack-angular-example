@@ -7,6 +7,19 @@ RUN apt-get -y install curl
 RUN curl -sL https://deb.nodesource.com/setup_4.x | sudo -E bash -
 RUN sudo apt-get install -y nodejs
 
+# @ to build some npm modules like socket.io
+# Install Python
+RUN sudo apt-get install -y python2.7
+WORKDIR /usr/bin
+RUN ln -s ./python2.7 ./python
+
+# Install make and gcc
+RUN sudo apt-get install -y build-essential
+
+# Install libkrb5-dev for kerberos that is one of mongodb's sub-modules
+RUN sudo apt-get install -y libkrb5-dev
+# to build some npm modules like socket.io @
+
 # Copy app sources
 COPY ./dist /webpack-angular-example/dist
 COPY ./server /webpack-angular-example/server
