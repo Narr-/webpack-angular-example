@@ -5,9 +5,9 @@ var express = require('express');
 var app = express();
 var config = require('./config');
 var redis = require('redis');
-// var redisClient = redis.createClient(config.REDIS_URL);
+var redisClient = redis.createClient(config.REDIS_URL);
 var session = require('express-session');
-// var RedisStore = require('connect-redis')(session);
+var RedisStore = require('connect-redis')(session);
 var morgan = require('morgan');
 var bodyParser = require('body-parser');
 var compression = require('compression');
@@ -18,14 +18,14 @@ var server = require('http').createServer(app);
 require('./socket')(server); // http://stackoverflow.com/questions/25013735/socket-io-nodejs-doesnt-work-on-heroku
 
 app.enable('trust proxy'); // or req.headers['x-forwarded-for'] || req.connection.remoteAddress
-// app.use(session({
-//   store: new RedisStore({
-//     client: redisClient
-//   }),
-//   secret: 'webpack ng',
-//   resave: false,
-//   saveUninitialized: false
-// }));
+app.use(session({
+  store: new RedisStore({
+    client: redisClient
+  }),
+  secret: 'webpack ng',
+  resave: false,
+  saveUninitialized: false
+}));
 app.use(morgan('combined', {
   'stream': logger.stream
 }));
