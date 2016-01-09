@@ -27,7 +27,6 @@ module.exports = function(server) {
       // var redis = require('redis');
       // var redisClient = redis.createClient(config.REDIS_URL);
 
-
       // var adapter = require('socket.io-redis');
       // var pub = redis(port, host, {
       //   auth_pass: "pwd"
