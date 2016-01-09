@@ -11,7 +11,7 @@ module.exports = function(server) {
     var config = require('./config');
     // when socket.io-redis connects to url with protocol(redis), it causes an error so exclude the protocol
     // and divide it to host and port
-    var redisUrl = config.REDIS_URL.match(/redis:\/\/(.*):([0-9]*?$)/);
+    var redisUrl = config.REDIS_URL.match(/redis:\/\/.*?@(.*?):([0-9]*?$)/);
     if (redisUrl) {
       console.log(redisUrl);
       var redisSocket = require('socket.io-redis');
