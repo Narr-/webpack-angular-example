@@ -71,7 +71,7 @@
     "webpack-dev-server": "^1.14.0"
   },
   "scripts": {
-    "start": "pm2 start ./server/server.js -i 1 --no-daemon"
+    "start": "pm2 start ./server/server.js -i 0 --no-daemon"
   },
   "repository": {
     "type": "git",

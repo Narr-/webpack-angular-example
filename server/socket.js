@@ -13,32 +13,12 @@ module.exports = function(server) {
     // and divide it to host and port
     var redisUrl = config.REDIS_URL.match(/redis:\/\/.*?@(.*?):([0-9]*?$)/);
     if (redisUrl) {
-      console.log(redisUrl);
       var redisSocket = require('socket.io-redis');
       var redis = require('redis');
-      io.adapter(redisSocket({
-        // host:'h:pfffs7ir6fig1md4d0gso4cq3ht@ec2-107-21-254-141.compute-1.amazonaws.com',
-        // host: redisUrl[1],
-        // port: redisUrl[2]
+      io.adapter(redisSocket({ // http://socket.io/docs/using-multiple-nodes/#using-node.js-cluster
         pubClient: redis.createClient(config.REDIS_URL),
         subClient: redis.createClient(config.REDIS_URL)
-      })); // http://socket.io/docs/using-multiple-nodes/#using-node.js-cluster
-
-      // var redis = require('redis');
-      // var redisClient = redis.createClient(config.REDIS_URL);
-
-      // var adapter = require('socket.io-redis');
-      // var pub = redis(port, host, {
-      //   auth_pass: "pwd"
-      // });
-      // var sub = redis(port, host, {
-      //   return_buffers: true,
-      //   auth_pass: "pwd"
-      // });
-      // io.adapter(adapter({
-      //   pubClient: pub,
-      //   subClient: sub
-      // }));
+      }));
     }
 
     // http://stackoverflow.com/questions/26217312/socket-io-and-multiple-dynos-on-heroku-node-js-app-websocket-is-closed-before
