@@ -15,6 +15,7 @@ module.exports = function(server) {
     if (redisUrl) {
       console.log(redisUrl);
       var redisSocket = require('socket.io-redis');
+      var redis = require('redis');
       io.adapter(redisSocket({
         // host:'h:pfffs7ir6fig1md4d0gso4cq3ht@ec2-107-21-254-141.compute-1.amazonaws.com',
         // host: redisUrl[1],
