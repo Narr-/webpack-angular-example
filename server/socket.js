@@ -13,7 +13,10 @@ module.exports = function(server) {
     var redisUrl = config.REDIS_URL.match(/redis:\/\/(.*?$)/);
     if (redisUrl) {
       var redisSocket = require('socket.io-redis');
-      io.adapter(redisSocket(redisUrl[1])); // http://socket.io/docs/using-multiple-nodes/#using-node.js-cluster
+      if (process.env.DYNO) {
+        console.log(redisUrl[1]));
+        io.adapter(redisSocket(config.REDIS_URL)); // http://socket.io/docs/using-multiple-nodes/#using-node.js-cluster
+      }
     }
 
     // http://stackoverflow.com/questions/26217312/socket-io-and-multiple-dynos-on-heroku-node-js-app-websocket-is-closed-before
