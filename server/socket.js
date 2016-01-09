@@ -11,12 +11,9 @@ module.exports = function(server) {
     var config = require('./config');
     // when socket.io-redis connects to url with protocol(redis), it causes an error so exclude the protocol
     var redisUrl = config.REDIS_URL.match(/redis:\/\/(.*?$)/);
-    console.log('redis adapter2222..!!');
     if (redisUrl) {
-      console.log('redis adapter..!!');
-      console.log(redisUrl[1]);
-      // var redisSocket = require('socket.io-redis');
-      // io.adapter(redisSocket(redisUrl[1])); // http://socket.io/docs/using-multiple-nodes/#using-node.js-cluster
+      var redisSocket = require('socket.io-redis');
+      io.adapter(redisSocket(redisUrl[1])); // http://socket.io/docs/using-multiple-nodes/#using-node.js-cluster
     }
 
     // http://stackoverflow.com/questions/26217312/socket-io-and-multiple-dynos-on-heroku-node-js-app-websocket-is-closed-before
