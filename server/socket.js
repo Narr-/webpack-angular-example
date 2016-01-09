@@ -17,7 +17,9 @@ module.exports = function(server) {
       var redis = require('redis');
       io.adapter(redisSocket({ // http://socket.io/docs/using-multiple-nodes/#using-node.js-cluster
         pubClient: redis.createClient(config.REDIS_URL),
-        subClient: redis.createClient(config.REDIS_URL)
+        subClient: redis.createClient(config.REDIS_URL, {
+          return_buffers: true
+        })
       }));
     }
 
