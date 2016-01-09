@@ -14,7 +14,7 @@ module.exports = function(server) {
     console.log('redis adapter2222..!!');
     if (redisUrl) {
       console.log('redis adapter..!!');
-      console.log(redisUrl[1]));
+      console.log(redisUrl[1]);
       // var redisSocket = require('socket.io-redis');
       // io.adapter(redisSocket(redisUrl[1])); // http://socket.io/docs/using-multiple-nodes/#using-node.js-cluster
     }
