@@ -8,17 +8,15 @@ module.exports = function(server) {
     var io = require('socket.io').listen(server);
     instance = io;
 
-    var config = require('./config');
-    // when socket.io-redis connects to url with protocol(redis), it causes an error so exclude the protocol
-    // and divide it to host and port
-    var redisUrl = config.REDIS_URL.match(/redis:\/\/.*?@(.*?):([0-9]*?$)/);
-    if (redisUrl) {
-      var redisSocket = require('socket.io-redis');
+    if (!process.env.TRAVIS) {
+      var config = require('./config');
       var redis = require('redis');
+      // when socket.io-redis connects to url with protocol(redis), it causes an error so using pubClient, subClient
+      var redisSocket = require('socket.io-redis');
       io.adapter(redisSocket({ // http://socket.io/docs/using-multiple-nodes/#using-node.js-cluster
         pubClient: redis.createClient(config.REDIS_URL),
         subClient: redis.createClient(config.REDIS_URL, {
-          return_buffers: true
+          return_buffers: true // https://github.com/socketio/socket.io-redis/issues/17
         })
       }));
     }
