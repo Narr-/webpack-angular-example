@@ -127,7 +127,9 @@ angular.module('todomvc')
     if (!WEBPACK_VAR.mode.production) {
       console.log('from socket %O', data);
     }
-    store.get();
+    if (todoSocket.id !== data.senderId) {
+      store.get();
+    }
   });
 
   return store;

@@ -40,10 +40,11 @@ gulp.task('webpack-dev-server', function() {
     proxy: {
       '/api*': {
         target: 'http://' + proxyAddr
-      },
-      '/socket.io*': {
-        target: 'http://' + proxyAddr
       }
+      // '/socket.io*': {
+      //   target: 'ws://' + proxyAddr,
+      //   ws: true,
+      // }
     }
   }).listen(port, !onlyThisHost ? null : 'localhost', function(err) {
     if (err) {

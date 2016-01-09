@@ -124,8 +124,15 @@ router.route('/todos')
           message: 'Data added'
         });
         // emit msg to the room this socket joined to except this socket
-        io.sockets.connected['/#' + req.body.socketId].to(req.session.userId).emit('dbChange', {
-          message: 'Data added'
+
+        // when using clustering in node, sometimes it can't get the connected socket by socket id
+        // so emit to the all sockets in the room including the sender socket and handle it on the client side
+        // by adding the sender socket id to the message
+
+        // io.sockets.connected['/#' + req.body.socketId].to(req.session.userId).emit('dbChange', {
+        io.to(req.session.userId).emit('dbChange', {
+          message: 'Data added',
+          senderId: req.body.socketId
         });
       }
     });
@@ -164,8 +171,10 @@ router.route('/todos/:id')
           _id: doc._id,
           message: 'Data updated'
         });
-        io.sockets.connected['/#' + req.body.socketId].to(req.session.userId).emit('dbChange', {
-          message: 'Data updated'
+        // io.sockets.connected['/#' + req.body.socketId].to(req.session.userId).emit('dbChange', {
+        io.to(req.session.userId).emit('dbChange', {
+          message: 'Data updated',
+          senderId: req.body.socketId
         });
       }
     });
