@@ -41,7 +41,7 @@ gulp.task('webpack-dev-server', function() {
       '/api*': {
         target: 'http://' + proxyAddr
       }
-      // '/socket.io*': {
+      // '/socket.io*': { // "webpack-dev-server": "^1.14.0" can't proxy ws yet
       //   target: 'ws://' + proxyAddr,
       //   ws: true,
       // }
