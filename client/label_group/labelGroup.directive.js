@@ -1,16 +1,13 @@
 'use strict';
 
 angular.module('todomvc')
-  .directive('labelGroup', function($compile, labelGroup) {
+  .directive('labelGroup', ($compile, labelGroup) => {
 
-    var link = function(scope, element, attrs) {
+    const link = (scope, element, attrs) => {
       // labelGroup.setScope(scope);
 
-      scope.$watch(function() {
-        return labelGroup.html;
-      }, function(newValue) {
+      scope.$watch(() => labelGroup.html, (newValue) => {
         // console.log(newValue);
-
         element.html(newValue);
         $compile(element.contents())(scope);
       }, true);

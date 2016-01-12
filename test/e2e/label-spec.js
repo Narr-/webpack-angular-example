@@ -1,18 +1,18 @@
 'use strict';
 
-describe('load labels', function() {
+describe('load labels', () => {
 
-  beforeEach(function() {
+  beforeEach(() => {
     browser.get('http://localhost:' + require('../../server/config').PORT);
   });
 
-  it('should have 7 labels', function() {
+  it('should have 7 labels', () => {
     element(by.css('#header h1')).click();
-    browser.wait(function() {
-      return element(by.css('.label-group .label')).isPresent();
-    }, 2000).then(function() {
-      var labels = element.all(by.css('.label-group .label'));
-      expect(labels.count()).toBe(7);
-    });
+    browser
+      .wait(() => element(by.css('.label-group .label')).isPresent(), 2000)
+      .then(() => {
+        const labels = element.all(by.css('.label-group .label'));
+        expect(labels.count()).toBe(7);
+      });
   });
 });

@@ -1,28 +1,22 @@
 'use strict';
 
-function LabelGroup($http) {
-  var lg = this;
-  // var sc;
+class LabelGroup {
+  constructor($http) {
+    this.$http = $http;
+    this.isCalled = false;
+    this.html = '';
+    this.loadHtml = null;
+  }
 
-  lg.isCalled = false;
-  lg.html = '';
-  lg.loadHtml = null;
-
-  // lg.setScope = function(scope) {
-  //   sc = scope;
-  // };
-
-  lg.setHtml = function() {
-    lg.loadHtml.load($http).then(function(response) {
-      var str = '';
-      angular.forEach(response.data.records, function(value, key) {
-        str += value.html;
+  setHtml() {
+    this.loadHtml.load(this.$http).then((response) => {
+      let str = '';
+      response.data.records.map((record) => {
+        str += record.html;
       });
-      lg.html = str;
-
-      // sc.$digest();
+      this.html = str;
     });
-  };
+  }
 }
 
 angular.module('todomvc')

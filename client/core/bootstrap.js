@@ -12,14 +12,15 @@ import 'todo/todoStorage.factory';
 import 'todo/todoFocus.directive';
 import 'todo/todoEscape.directive';
 import 'todo/todo.html';
-require('label_group/labelGroup.service');
-require('label_group/labelGroup.directive');
-require('label_group/labelGroup.controller');
+import 'label_group/labelGroup.service';
+import 'label_group/labelGroup.directive';
+import 'label_group/labelGroup.controller';
 
 if (WEBPACK_VAR.mode.production) {
-  require('./config/production')(appModule);
+  // import production from './config/production'; // 'import' and 'export' may only appear at the top level
+  require('./config/production').default(appModule);
 }
-angular.element(document).ready(function() {
+angular.element(document).ready(() => {
   angular.bootstrap(document, [appModule.name], {
     //strictDi: true
   });
