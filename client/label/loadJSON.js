@@ -1,9 +1,9 @@
 'use strict';
 
-function LoadJSON() {
-  this.load = function($http) {
+class LoadJSON {
+  load($http) {
     return $http.get(WEBPACK_VAR.labelJsonPath);
-  };
+  }
 }
 
-module.exports = LoadJSON;
+export default LoadJSON;

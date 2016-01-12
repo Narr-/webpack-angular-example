@@ -40,7 +40,7 @@ module.exports = function(config) {
         preLoaders: [{
           test: /\.js$/,
           exclude: /node_modules/,
-          loader: 'istanbul-instrumenter!jscs!jshint'
+          loader: 'jscs!jshint'
         }],
         loaders: [{
           test: /\.scss$/,
@@ -53,8 +53,13 @@ module.exports = function(config) {
           loader: 'null'
         }, {
           test: /\.js$/,
-          loader: 'ng-annotate',
+          loader: 'ng-annotate!babel?presets[]=es2015',
           exclude: /node_modules/
+        }],
+        postLoaders: [{
+          test: /\.js$/,
+          exclude: /node_modules/,
+          loader: 'istanbul-instrumenter'
         }]
       },
       jshint: {

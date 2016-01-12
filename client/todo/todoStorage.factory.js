@@ -9,24 +9,24 @@
 'use strict';
 
 angular.module('todomvc')
-  .factory('todoStorage', function($http, $injector) {
+  .factory('todoStorage', ($http, $injector) =>
     // Detect if an API backend is present. If so, return the API module, else
     // hand off the localStorage adapter
-    return $http.post('/api', {
-        userId: localStorage.getItem('dbUserId')
-      })
-      .then(function(response) {
+    $http.post('/api', {
+      userId: localStorage.getItem('dbUserId')
+    })
+    .then((response) => {
         if (response.data && response.data.userId) {
           localStorage.setItem('dbUserId', response.data.userId);
         }
         return $injector.get('api');
-      }, function() {
-        return $injector.get('localStorage');
-      });
-  })
+      }, () =>
+      $injector.get('localStorage')
+    )
+  )
 
-.factory('api', function($resource, todoSocket) {
-  var store = {
+.factory('api', ($resource, todoSocket) => {
+  const store = {
     todos: [],
 
     api: $resource('/api/todos/:id', null, {
@@ -35,17 +35,17 @@ angular.module('todomvc')
       }
     }),
 
-    clearCompleted: function() {
-      var originalTodos = store.todos.slice(0);
+    clearCompleted() {
+      const originalTodos = store.todos.slice(0);
 
-      var incompleteTodos = store.todos.filter(function(todo) {
-        return !todo.completed;
-      });
+      const incompleteTodos = store.todos.filter((todo) =>
+        !todo.completed
+      );
 
       angular.copy(incompleteTodos, store.todos);
 
       return store.api.delete(function success() {
-        var userId = localStorage.getItem('dbUserId');
+        const userId = localStorage.getItem('dbUserId');
         if (userId) {
           todoSocket.emit('dbChange', {
             message: 'Data deleted',
@@ -59,20 +59,20 @@ angular.module('todomvc')
       });
     },
 
-    delete: function(todo) {
-      var originalTodos = store.todos.slice(0);
+    delete(todo) {
+      const originalTodos = store.todos.slice(0);
 
       store.todos.splice(store.todos.indexOf(todo), 1);
       return store.api.delete({
           id: todo._id
         },
         function sucess() {
-          var userId = localStorage.getItem('dbUserId');
+          const userId = localStorage.getItem('dbUserId');
           if (userId) {
             todoSocket.emit('dbChange', { // socket emits here cos can't add postData(payload) to DELETE Method
               message: 'Data deleted',
               dataObj: {
-                userId: userId
+                userId
               }
             });
           }
@@ -82,14 +82,14 @@ angular.module('todomvc')
         });
     },
 
-    get: function() {
-      return store.api.query(function(resp) {
+    get() {
+      return store.api.query((resp) => {
         angular.copy(resp, store.todos);
       });
     },
 
-    insert: function(todo) {
-      var originalTodos = store.todos.slice(0);
+    insert(todo) {
+      const originalTodos = store.todos.slice(0);
       todo.socketId = todoSocket.id;
       return store.api.save(todo,
           function success(resp) {
@@ -102,7 +102,7 @@ angular.module('todomvc')
         .$promise;
     },
 
-    put: function(todo) {
+    put(todo) {
       todo.socketId = todoSocket.id;
       return store.api.update({
           id: todo._id
@@ -111,8 +111,8 @@ angular.module('todomvc')
     }
   };
 
-  todoSocket.on('connect', function(data) {
-    var userId = localStorage.getItem('dbUserId');
+  todoSocket.on('connect', (data) => {
+    const userId = localStorage.getItem('dbUserId');
     if (userId) {
       todoSocket.emit('join', {
         message: 'join the userId\'s room',
@@ -123,7 +123,7 @@ angular.module('todomvc')
     }
   });
 
-  todoSocket.on('dbChange', function(data) {
+  todoSocket.on('dbChange', (data) => {
     if (!WEBPACK_VAR.mode.production) {
       console.log('from socket %O', data);
     }
@@ -135,56 +135,56 @@ angular.module('todomvc')
   return store;
 })
 
-.factory('localStorage', function($q) {
-  var STORAGE_ID = 'todos-angularjs';
+.factory('localStorage', ($q) => {
+  const STORAGE_ID = 'todos-angularjs';
 
-  var store = {
+  const store = {
     todos: [],
 
-    _getFromLocalStorage: function() {
+    _getFromLocalStorage() {
       return JSON.parse(localStorage.getItem(STORAGE_ID) || '[]');
     },
 
-    _saveToLocalStorage: function(todos) {
+    _saveToLocalStorage(todos) {
       localStorage.setItem(STORAGE_ID, JSON.stringify(todos));
     },
 
-    clearCompleted: function() {
-      var deferred = $q.defer();
-      var incompleteTodos = store.todos.filter(function(todo) {
-        return !todo.completed;
-      });
+    clearCompleted() {
+      const deferred = $q.defer();
+      const incompleteTodos = store.todos.filter((todo) =>
+        !todo.completed
+      );
       angular.copy(incompleteTodos, store.todos);
       store._saveToLocalStorage(store.todos);
       deferred.resolve(store.todos);
       return deferred.promise;
     },
 
-    delete: function(todo) {
-      var deferred = $q.defer();
+    delete(todo) {
+      const deferred = $q.defer();
       store.todos.splice(store.todos.indexOf(todo), 1);
       store._saveToLocalStorage(store.todos);
       deferred.resolve(store.todos);
       return deferred.promise;
     },
 
-    get: function() {
-      var deferred = $q.defer();
+    get() {
+      const deferred = $q.defer();
       angular.copy(store._getFromLocalStorage(), store.todos);
       deferred.resolve(store.todos);
       return deferred.promise;
     },
 
-    insert: function(todo) {
-      var deferred = $q.defer();
+    insert(todo) {
+      const deferred = $q.defer();
       store.todos.push(todo);
       store._saveToLocalStorage(store.todos);
       deferred.resolve(store.todos);
       return deferred.promise;
     },
 
-    put: function(todo, index) {
-      var deferred = $q.defer();
+    put(todo, index) {
+      const deferred = $q.defer();
       if (index) {
         store.todos[index] = todo;
       }

@@ -8,12 +8,12 @@
 angular.module('todomvc')
   .directive('todoFocus', function todoFocus($timeout) {
 
-    return function(scope, elem, attrs) {
-      scope.$watch(attrs.todoFocus, function(newVal) {
+    return (scope, elem, attrs) => {
+      scope.$watch(attrs.todoFocus, (newVal) => {
         if (newVal) {
           // For a delay which can give some time to input to be visible before
           // it gets focused so that it won't miss the focus.
-          $timeout(function() {
+          $timeout(() => {
             elem[0].focus();
           }, 0, false);
         }

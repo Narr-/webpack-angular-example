@@ -86,7 +86,7 @@ module.exports = function(option) {
         loader: 'url?limit=10000&name=res/font/[name].[ext]?[hash]'
       }, {
         test: /\.js$/,
-        loader: 'ng-annotate',
+        loader: 'ng-annotate!babel?presets[]=es2015',
         exclude: /node_modules/
       }]
     },

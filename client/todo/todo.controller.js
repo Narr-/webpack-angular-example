@@ -9,12 +9,12 @@
 angular.module('todomvc')
   .controller('TodoCtrl', function TodoCtrl(store, $scope, $filter, $routeParams, labelGroup, $location) {
 
-    var vm = this;
+    const vm = this;
     vm.todos = $scope.todos = store.todos; // $scope.todos => to watch todos by $scope.$watch
     vm.newTodo = '';
     vm.editedTodo = null;
 
-    $scope.$watch('todos', function() {
+    $scope.$watch('todos', () => {
       vm.remainingCount = $filter('filter')(vm.todos, {
         completed: false
       }).length;
@@ -23,8 +23,8 @@ angular.module('todomvc')
     }, true);
 
     // Monitor the current route for changes and adjust the filter accordingly.
-    $scope.$on('$routeChangeSuccess', function(e, current, previous) {
-      var status = vm.status = $routeParams.status || '';
+    $scope.$on('$routeChangeSuccess', (e, current, previous) => {
+      const status = vm.status = $routeParams.status || '';
       if (status === 'active') {
         vm.statusFilter = {
           completed: false
@@ -41,8 +41,8 @@ angular.module('todomvc')
       }
     });
 
-    vm.addTodo = function() {
-      var newTodo = {
+    vm.addTodo = () => {
+      const newTodo = {
         title: vm.newTodo.trim(),
         completed: false
       };
@@ -56,18 +56,18 @@ angular.module('todomvc')
         .then(function success() {
           vm.newTodo = '';
         })
-        .finally(function() {
+        .finally(() => {
           vm.saving = false;
         });
     };
 
-    vm.editTodo = function(todo) {
+    vm.editTodo = (todo) => {
       vm.editedTodo = todo;
       // Clone the original todo to restore it on demand.
       vm.originalTodo = angular.extend({}, todo);
     };
 
-    vm.saveEdits = function(todo, event) {
+    vm.saveEdits = (todo, event) => {
       // Blur events are automatically triggered after the form submit event.
       // This does some unfortunate logic handling to prevent saving twice.
       if (event === 'blur' && vm.saveEvent === 'submit') {
@@ -94,23 +94,23 @@ angular.module('todomvc')
         .then(function success() {}, function error() {
           todo.title = vm.originalTodo.title;
         })
-        .finally(function() {
+        .finally(() => {
           vm.editedTodo = null;
         });
     };
 
-    vm.revertEdits = function(todo) {
+    vm.revertEdits = (todo) => {
       vm.todos[vm.todos.indexOf(todo)] = vm.originalTodo;
       vm.editedTodo = null;
       vm.originalTodo = null;
       vm.reverted = true;
     };
 
-    vm.removeTodo = function(todo) {
+    vm.removeTodo = (todo) => {
       store.delete(todo);
     };
 
-    vm.toggleCompleted = function(todo, completed) {
+    vm.toggleCompleted = (todo, completed) => {
       if (angular.isDefined(completed)) {
         todo.completed = completed;
       }
@@ -120,24 +120,31 @@ angular.module('todomvc')
         });
     };
 
-    vm.clearCompletedTodos = function() {
+    vm.clearCompletedTodos = () => {
       store.clearCompleted();
     };
 
-    vm.markAll = function(completed) {
-      vm.todos.forEach(function(todo) {
+    vm.markAll = (completed) => {
+      vm.todos.forEach((todo) => {
         if (todo.completed !== completed) {
           vm.toggleCompleted(todo, completed);
         }
       });
     };
 
-    vm.loadChunks = function() {
+    vm.loadChunks = () => {
       if (!labelGroup.isCalled) {
         labelGroup.isCalled = true;
-        require.ensure([], function(require) {
+        /*
+        Promise.all(['module1', 'module2', 'module3']
+          .map(x => System.import(x))) // https://webpack.github.io/docs/code-splitting.html#es6-modules
+          .then(([module1, module2, module3]) => {
+            // Use module1, module2, module3
+          });
+        */
+        require.ensure([], (require) => { // can't use 'import' in require.ensure
           require('label/label.scss');
-          var LoadJSON = require('label/loadJSON');
+          const LoadJSON = require('label/loadJSON').default;
           labelGroup.loadHtml = new LoadJSON();
           labelGroup.setHtml();
         }, 'label-chunk');
