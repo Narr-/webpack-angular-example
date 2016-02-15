@@ -25,7 +25,7 @@ COPY ./dist /webpack-angular-example/dist
 COPY ./server /webpack-angular-example/server
 COPY ./package.json /webpack-angular-example
 
-# Install globla plugins
+# Install global plugins
 # RUN npm install -g pm2
 
 # Install app dependencies
