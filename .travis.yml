@@ -20,7 +20,7 @@ addons:
 # Node.js v4 (or io.js v3) compiler requirements @
 
 install:
-  - npm install -g gulp
+  - npm install -g gulp@3.9.1
   - npm install
 
 before_script:

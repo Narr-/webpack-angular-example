@@ -1,5 +1,5 @@
 # webpack-angular-example
-[![Build Status](https://travis-ci.org/Narr-/webpack-angular-example.svg?branch=master)](https://travis-ci.org/Narr-/webpack-angular-example)
+[![Build Status](https://travis-ci.org/narr/webpack-angular-example.svg?branch=master)](https://travis-ci.org/narr/webpack-angular-example)
 
 An example of using Webpack, AngularJS, Socket.IO, Nginx and Docker
 Check out <http://webpack-ng-example.herokuapp.com/>
@@ -22,6 +22,6 @@ npm install
 gulp bu
 docker-compose up -d
 ```
-After that, open http:"docker-machine's IP":8000 on a browser
+After that, open http://"docker-machine's IP":8000 on a browser
 <br>
 <br>
