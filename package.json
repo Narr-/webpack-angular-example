@@ -78,7 +78,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/Narr-/webpack-angular-example.git"
+    "url": "https://github.com/narr/webpack-angular-example.git"
   },
   "license": "MIT"
 }
