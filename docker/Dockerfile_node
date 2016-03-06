@@ -1,4 +1,4 @@
-FROM ubuntu
+FROM ubuntu:14.04
 
 # Install curl
 RUN apt-get -y install curl
@@ -21,12 +21,10 @@ RUN sudo apt-get install -y libkrb5-dev
 # to build some npm modules like socket.io @
 
 # Copy app sources
-COPY ./dist /webpack-angular-example/dist
+COPY ./package.json /webpack-angular-example/
+COPY ./npm-shrinkwrap.prod.json /webpack-angular-example/npm-shrinkwrap.json
 COPY ./server /webpack-angular-example/server
-COPY ./package.json /webpack-angular-example
-
-# Install global plugins
-# RUN npm install -g pm2
+COPY ./dist /webpack-angular-example/dist
 
 # Install app dependencies
 RUN cd /webpack-angular-example; npm install --production

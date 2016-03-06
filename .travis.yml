@@ -5,7 +5,7 @@ branches:
 language: node_js
 
 node_js:
-  - "4"
+  - "4.2.4"
 
 # @ Node.js v4 (or io.js v3) compiler requirements
 env:
@@ -40,6 +40,7 @@ before_deploy:
   - rm -rf ./server/log
   - mkdir ./heroku
   - mv ./package.json ./server ./dist ./heroku
+  - mv ./npm-shrinkwrap.prod.json ./heroku/npm-shrinkwrap.json
   - cd ./heroku # a directory that will be deployed
 
 deploy:
