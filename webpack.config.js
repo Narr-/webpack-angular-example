@@ -113,12 +113,12 @@ module.exports = function(option) {
         io: 'socket.io-client'
       }),
       new Sprite({
-        'source': appPath + '/res/img/icon/',
-        'imgPath': appPath + '/res/img/icon/',
-        'cssPath': appPath + '/res/img/icon/',
-        'processor': 'scss',
-        'multiFolders': true,
-        'prefix': 'sprite-icon'
+        source: appPath + '/res/img/icon/',
+        imgPath: appPath + '/res/img/icon/',
+        cssPath: appPath + '/res/img/icon/',
+        processor: 'scss',
+        bundleMode: 'multiple',
+        prefix: 'sprite-icon'
       }),
       new HtmlWebpackPlugin(htmlWebpackPluginCfg)
     ],
