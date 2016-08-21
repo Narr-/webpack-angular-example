@@ -17,6 +17,10 @@ angular.module('todomvc')
         }
       });
 
+      // element.on('$destroy', () => {
+      //   elem.unbind('keydown');
+      // });
+
       scope.$on('$destroy', () => {
         elem.unbind('keydown');
       });

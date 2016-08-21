@@ -6,11 +6,11 @@ angular.module('todomvc')
     const link = (scope, element, attrs) => {
       // labelGroup.setScope(scope);
 
-      scope.$watch(() => labelGroup.html, (newValue) => {
+      scope.$watch(() => labelGroup.html, (newValue, oldValue) => {
         // console.log(newValue);
         element.html(newValue);
-        $compile(element.contents())(scope);
-      }, true);
+        // $compile(element.contents())(scope);
+      });
     };
 
     return {

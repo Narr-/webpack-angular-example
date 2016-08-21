@@ -8,3 +8,4 @@ sprite-*
 *.log
 coverage
 log
+.history
